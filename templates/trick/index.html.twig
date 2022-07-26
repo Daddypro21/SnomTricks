@@ -1,12 +1,26 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello TrickController!{% endblock %}
+{% block title %}home{% endblock %}
 
 {% block body %}
+ <h1 class="text-center" >Bienvenue sur SnowTricks</h1>
+{% if tricks|length > 0 %}
+    {% for row in tricks|batch(3) %}
+        <div class="row mb-5">
+            {% for trick in row %}
+                <div class="col-md-4">
+                    <article class="bg-white rounded shadow">
+                        <h2><a href="{{ path('app_tricks_show', {id: trick.id} )}}">{{ trick.title}}</a></h2>
+                        {# <a href="{{ path('app_tricks_show', {id: trick.id} )}}"><img src="{{trick.imageName ? vich_uploader_asset(trick) : asset('images/placeholder.jpg') }}" alt="{{ trick.title }}" class="img-pin-index w-100 rounded-top"></a> #}
+                        <p class="mt-2">{{ trick.description|u.truncate(8, '...') }}</p>
+                        {# <p>Publié il y'a de cela {{ trick.createdAt|ago}} par {{ trick.user.firstName}}</p> #}
+                    </article>
+                </div>
 
-
-<div class="example-wrapper">
-    <h1>Bienvenue sur SNOWTRICKS</h1>
-    
-</div>
+            {% endfor %}
+        </div>
+    {% endfor %}
+ {% else %}
+ <h2 class='h1 text-center mt-5'> pas de trick #0 <a href="{{ path('app_tricks_create')}}">soyez le premier à créer un trick</a></h2>
+{% endif %}
 {% endblock %}

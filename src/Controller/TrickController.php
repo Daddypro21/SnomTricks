@@ -3,30 +3,35 @@
 namespace App\Controller;
 
 use App\Entity\Trick;
+use App\Form\TrickType;
+use App\Repository\TrickRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class TrickController extends AbstractController
 {
     #[Route('/', name: 'app_home')]
-    public function index(): Response
+    public function index( TrickRepository $trickRepository): Response
     {
-        return $this->render('trick/index.html.twig', [
-            'controller_name' => 'TrickController',
-        ]);
+        $tricks = $trickRepository->findBy([],['createdAt'=>'DESC']);
+
+        return $this->render('trick/index.html.twig', ['tricks'=>$tricks]);
     }
 
     #[Route('/tricks/create', name: 'app_tricks_create',methods :['GET','POST'])]
-    public function create(Request $request,UserInterface $user,EntityManagerInterface $em):Response 
+    public function create(Request $request,EntityManagerInterface $em):Response 
     {
+        //UserInterface $user  : je l'utiliserai quand je vais créer ma classe User
         $trick = new Trick;
         $form = $this->createForm(TrickType::class,$trick);
            
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid()){
-            $trick->setUser($user);
+            //$trick->setUser($user);
             $em->persist($trick);
             $em->flush();
 
