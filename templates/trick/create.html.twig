@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}new trick{% endblock %}
+
+{% block body %}
+ <div class="row">
+   <div class="col-md-6 mx-auto">
+   <h1>creer un trick</h1>
+
+   {{include('trick/form.html.twig',{'submitButtonText':'creer un trick'}) }}
+   </div>
+{% endblock %}
