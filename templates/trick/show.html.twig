@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}detail-trick{% endblock %}
+
+{% block body %}
+ <h1 class="text-center mb-5">mon trick</h1>
+ <div class="row">
+    <div class="col-md-6 mx-auto">
+        <article class="bg-white rounded shadow">
+        <h2><a href="{{ path('app_tricks_show', {id: trick.id} )}}">{{ trick.title}}</a></h2>
+        {# <a href="{{ path('app_tricks_show', {id: trick.id} )}}"><img src="{{trick.imageName ? vich_uploader_asset(pin) : asset('images/placeholder.jpg') }}" alt="{{ pin.title }}" class="img-pin-show w-100 rounded-top"></a> #}
+        <p class="pt-5 text-break">{{ trick.description }}</p>
+        <p>Publié il y'a de cela {{ trick.createdAt|ago}} par {#{{ trick.user.firstName}}#}</p>
+
+        <a href="{{ path('app_tricks_edit',{id: trick.id })}}">Edit |</a>
+        <a href="#" onclick=" event.preventDefault(); confirm('Are you sure') && document.getElementById('js-pin-form-delete').submit();"> delete | </a>
+        {# <a href="#" onclick=" event.preventDefault(); confirm('Are you sure') && document.getElementById('js-pin-form-delete').submit();"> delete | </a> #}
+        <a href="{{ path('app_home')}}">Retour</a>
+
+        <form method="POST" id="js-pin-form-delete" action=" {{path('app_tricks_delete',{id: trick.id })}}"  style="Display:none;">
+            <input type="hidden" name="csrf_token" value="{{csrf_token('trick_delete_' ~ trick.id)}}">
+            <input type="hidden" name="#">
+        </form>
+        </article>
+        
+    </div>
+</div>
+
+    
+
+{% endblock %}
