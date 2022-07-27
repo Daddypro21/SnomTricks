@@ -27,6 +27,10 @@ class Trick
     #[ORM\Column]
     private ?\DateTimeImmutable $UpdateAt = null;
 
+    #[ORM\ManyToOne(inversedBy: 'tricks')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $user = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -89,5 +93,17 @@ class Trick
         }
         
         $this->setUpdateAt(new \DateTimeImmutable);
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
+
+        return $this;
     }
 }

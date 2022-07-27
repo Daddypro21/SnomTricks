@@ -25,7 +25,7 @@ class TrickController extends AbstractController
     #[Route('/tricks/create', name: 'app_tricks_create',methods :['GET','POST'])]
     public function create(Request $request,EntityManagerInterface $em):Response 
     {
-        //UserInterface $user  : je l'utiliserai quand je vais créer ma classe User
+        //UserInterface $user
         $trick = new Trick;
         $form = $this->createForm(TrickType::class,$trick);
            
