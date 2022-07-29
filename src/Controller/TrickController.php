@@ -19,11 +19,13 @@ class TrickController extends AbstractController
     {
         $tricks = $trickRepository->findBy([],['createdAt'=>'DESC']);
 
+        //$this->addFlash('success','Bienvenue '.$this->getUser()->getUserIdentifier());
+
         return $this->render('trick/index.html.twig', ['tricks'=>$tricks]);
     }
 
     #[Route('/tricks/create', name: 'app_tricks_create',methods :['GET','POST'])]
-    public function create(Request $request,EntityManagerInterface $em):Response 
+    public function create(Request $request,EntityManagerInterface $em ,UserInterface $user):Response 
     {
         //UserInterface $user
         $trick = new Trick;
