@@ -13,6 +13,11 @@
                         <h2><a href="{{ path('app_tricks_show', {id: trick.id} )}}">{{ trick.title}}</a></h2>
                         {# <a href="{{ path('app_tricks_show', {id: trick.id} )}}"><img src="{{trick.imageName ? vich_uploader_asset(trick) : asset('images/placeholder.jpg') }}" alt="{{ trick.title }}" class="img-pin-index w-100 rounded-top"></a> #}
                         <p class="mt-2">{{ trick.description|u.truncate(8, '...') }}</p>
+                        <a href="#"  class="btn btn-danger" onclick=" event.preventDefault(); confirm('Are you sure') && document.getElementById('js-pin-form-delete-{{trick.id}}').submit();"> delete </a>
+                        <form method="POST" id="js-pin-form-delete-{{trick.id}}" action=" {{path('app_tricks_delete',{id: trick.id })}}"  style="Display:none;">
+                            <input type="hidden" name="csrf_token" value="{{csrf_token('trick_delete_' ~ trick.id)}}">
+                            <input type="hidden" name="#">
+                        </form>
                         {# <p>Publié il y'a de cela {{ trick.createdAt|ago}} par {{ trick.user.firstName}}</p> #}
                     </article>
                 </div>
