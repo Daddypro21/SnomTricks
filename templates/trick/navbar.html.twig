@@ -8,24 +8,27 @@
       <div class="collapse navbar-collapse " id="navbarsExample03">
         <ul class="navbar-nav me-auto mb-2 mb-sm-0 ">
           <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="{{ path('app_home')}}">Home</a>
+            <a class="nav-link active" aria-current="page" href="{{ path('app_home')}}">Accueil</a>
           </li>
           {% if app.user %}
           <li class="nav-item">
-            <a class="nav-link" href="{{ path('app_tricks_create')}}">New Trick</a>
+            <a class="nav-link" href="{{ path('app_tricks_create')}}">Créer un trick</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">Account</a>
+            <a class="nav-link" href="#">Compte</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="{{ path('app_logout')}}">Logout</a>
+            <a class="nav-link" href="#" onclick="event.preventDefault(); document.getElementById('js-form-logout').submit();">Deconnexion</a>
           </li>
+          <form id="js-form-logout" method="POST" action="{{ path('app_logout')}}" style="display:none;">
+            <input type="hidden" name="_csrf_token" value="{{csrf_token('logout')}}">
+          </form>
           {% else %}
           <li class="nav-item">
-            <a class="nav-link" href="#">Register</a>
+            <a class="nav-link" href="{{ path('app_register')}}">Inscription</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="{{ path('app_login')}}" >Login</a>
+            <a class="nav-link" href="{{ path('app_login')}}" >Connexion</a>
           </li>
           {% endif %}
         </ul>
