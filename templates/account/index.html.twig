@@ -10,8 +10,9 @@
 
             <h2 class="mt-5">{{app.user.fullName()}}</h2>
             <p class="lead">{{app.user.email}}</p>
+            <p ><small> compte créé le {{app.user.createdAt|date('d/m/Y')}}</small></p>
             <P>
-            <a href="">Editer le compte </a> | <a href="">Changer le mot de passe</a>
+            <a href="{{path('app_account_edit')}}">Editer le compte </a> | <a href="">Changer le mot de passe</a>
             </a>
         </div>
     </div>
