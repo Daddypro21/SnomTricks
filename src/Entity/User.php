@@ -229,4 +229,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+
+    public function gravatar(?int $size = 200)
+    {
+        return 'https://www.gravatar.com/'.md5(strtolower(trim($this->getEmail()))).'/s?='.$size;
+    }
 }
