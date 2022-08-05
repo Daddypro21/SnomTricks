@@ -6,6 +6,7 @@
 parameters:
     app.mail_from_name: 'snowtricks'
     app.mail_from_address: 'norepy@snowtricks.com'
+    images_directory: '%kernel.project_dir%/public/uploads/images'
 services:
     # default configuration for services in *this* file
     _defaults:
