@@ -9,8 +9,10 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 
 class TrickController extends AbstractController
 {
@@ -25,21 +27,47 @@ class TrickController extends AbstractController
     }
 
     #[Route('/tricks/create', name: 'app_tricks_create',methods :['GET','POST'])]
-    public function create(Request $request,EntityManagerInterface $em ,UserInterface $user):Response 
+    public function create(Request $request,EntityManagerInterface $em ,UserInterface $user,SluggerInterface $slugger):Response 
     {
-        //User 
+        if (!$this->getUser()) {
+            $this->addFlash('info','Vous devrez vous connecter avant de créer un trick');
+            return $this->redirectToRoute('app_home');
+        }
+
         $trick = new Trick;
         $form = $this->createForm(TrickType::class,$trick);
            
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid()){
+            $images = $form->get('images')->getData();
+
+            if ($images) {
+                $originalFilename = pathinfo($images->getClientOriginalName(), PATHINFO_FILENAME);
+                // this is needed to safely include the file name as part of the URL
+                $safeFilename = $slugger->slug($originalFilename);
+                $newFilename = $safeFilename.'-'.uniqid().'.'.$images->guessExtension();
+
+                // Move the file to the directory where brochures are stored
+                try {
+                    $images->move(
+                        $this->getParameter('images_directory'),
+                        $newFilename
+                    );
+                } catch (FileException $e) {
+                    // ... handle exception if something happens during file upload
+                }
+
+                // updates the 'brochureFilename' property to store the PDF file name
+                // instead of its contents
+                $trick->setImages($newFilename);
+
+                
+            }
             $trick->setUser($user);
             $em->persist($trick);
             $em->flush();
-
             $this->addFlash('success','trick successfully created');
-
-            return $this->redirectToRoute('app_home');
+            return $this->redirectToRoute('app_home');   
 
         }
         return $this->render('trick/create.html.twig',
@@ -47,12 +75,42 @@ class TrickController extends AbstractController
     }
 
     #[Route('/tricks/{id<[0-9]+>}/edit', name: 'app_tricks_edit',methods:["GET","PUT","POST"])]
-    public function edit(Trick $trick,Request $request,EntityManagerInterface $em):Response 
+    public function edit(Trick $trick,Request $request,EntityManagerInterface $em,SluggerInterface $slugger):Response 
     {
+
+        if (!$this->getUser()) {
+            $this->addFlash('info','Vous devrez vous connecter avant de modifier un trick');
+            return $this->redirectToRoute('app_home');
+        }
         $form = $this->createForm(TrickType::class,$trick);
     
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid()){
+
+            $images = $form->get('images')->getData();
+
+            if ($images) {
+                $originalFilename = pathinfo($images->getClientOriginalName(), PATHINFO_FILENAME);
+                // this is needed to safely include the file name as part of the URL
+                $safeFilename = $slugger->slug($originalFilename);
+                $newFilename = $safeFilename.'-'.uniqid().'.'.$images->guessExtension();
+
+                // Move the file to the directory where brochures are stored
+                try {
+                    $images->move(
+                        $this->getParameter('images_directory'),
+                        $newFilename
+                    );
+                } catch (FileException $e) {
+                    // ... handle exception if something happens during file upload
+                }
+
+                // updates the 'brochureFilename' property to store the PDF file name
+                // instead of its contents
+                $trick->setImages($newFilename);
+
+                
+            }
             $em->flush();
 
             $this->addFlash('success','trick successfully updated');
@@ -69,6 +127,10 @@ class TrickController extends AbstractController
     #[Route('/tricks/{id<[0-9]+>}/delete', name: 'app_tricks_delete',methods :["GET","POST"])]
     public function delete(Trick $trick,Request $request ,EntityManagerInterface $em):Response 
     {
+        if (!$this->getUser()) {
+            $this->addFlash('info','Vous devrez vous connecter avant de supprimer un trick');
+            return $this->redirectToRoute('app_home');
+        }
         if($this->isCsrfTokenValid('trick_delete_'.$trick->getId(),$request->request->get('csrf_token'))){
             $em->remove($trick);
             $em->flush();
