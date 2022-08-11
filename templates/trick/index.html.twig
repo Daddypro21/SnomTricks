@@ -2,8 +2,24 @@
 
 {% block title %}home{% endblock %}
 
+{% block header %}
+
+<div style="background: url(https://images.pexels.com/photos/848612/pexels-photo-848612.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1);height: 100vh;" class="jumbotron bg-cover text-white mb-4 bgimageheader">
+    <div class="container py-5 text-center">
+        <h1 class="display-4 font-weight-bold">Bienvenue sur SnowTricks </h1>
+        <p class="font-italic mb-0">Le premier site communautaire pour les adeptes de snowboard</p>
+        <p class="font-italic">Créer par
+            <a href="https://github.com/Daddypro21/SnowTricks.git" class="text-white">
+                <u>Slim Ndema M " Daddypro21"</u>
+            </a>
+        </p>
+        <a href="https://github.com/Daddypro21/SnowTricks.git" role="button" class="btn btn-primary px-5">Voir le dépot github</a>
+    </div>
+</div>
+
+
+{% endblock %}
 {% block body %}
- <h1 class="text-center" >Bienvenue sur SnowTricks</h1>
 {% if tricks|length > 0 %}
     {% for row in tricks|batch(3) %}
         <div class="row mb-5">
@@ -13,13 +29,7 @@
                         <h2><a href="{{ path('app_tricks_show', {id: trick.id} )}}">{{ trick.title}}</a></h2>
                         <a href="{{ path('app_tricks_show', {id: trick.id} )}}"><img src="{{trick.images ? asset('uploads/images/' ~ trick.images) : asset('images/placeholder.jpg') }}" alt="{{ trick.title }}" class="img-pin-index w-100 rounded-top"></a>
                         <p class="mt-2">{{ trick.description|u.truncate(8, '...') }}</p>
-                        <a href="#"  class="btn btn-danger" onclick=" event.preventDefault(); confirm('Are you sure') && document.getElementById('js-pin-form-delete-{{trick.id}}').submit();"> delete </a>
-                        <form method="POST" id="js-pin-form-delete-{{trick.id}}" action=" {{path('app_tricks_delete',{id: trick.id })}}"  style="Display:none;">
-                            <input type="hidden" name="csrf_token" value="{{csrf_token('trick_delete_' ~ trick.id)}}">
-                            <input type="hidden" name="#">
-                        </form>
-                        
-                        {# <p>Publié il y'a de cela {{ trick.createdAt|ago}} par {{ trick.user.firstName}}</p> #}
+                        <p><small class="text-muted">Publié il y'a de cela {{ trick.createdAt|ago}} par {{ trick.user.firstName}}</small></p>
                     </article>
                 </div>
 

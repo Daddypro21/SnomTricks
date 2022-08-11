@@ -30,6 +30,13 @@ article .img-pin-show{
  
  }
 
+ article .img-trick-index{
+    /* max-width:300px;
+    max-height: 300px; */
+    width:auto;
+ 
+ }
+
 article{
     margin:auto;
     width: 85%;

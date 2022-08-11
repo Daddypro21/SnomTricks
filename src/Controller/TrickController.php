@@ -2,9 +2,13 @@
 
 namespace App\Controller;
 
+use App\Entity\User;
 use App\Entity\Trick;
 use App\Form\TrickType;
+use App\Entity\Comments;
+use App\Form\CommentsType;
 use App\Repository\TrickRepository;
+use App\Repository\CommentsRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -14,8 +18,11 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 
+
 class TrickController extends AbstractController
 {
+
+    
     #[Route('/', name: 'app_home')]
     public function index( TrickRepository $trickRepository): Response
     {
@@ -43,22 +50,21 @@ class TrickController extends AbstractController
 
             if ($images) {
                 $originalFilename = pathinfo($images->getClientOriginalName(), PATHINFO_FILENAME);
-                // this is needed to safely include the file name as part of the URL
+                
                 $safeFilename = $slugger->slug($originalFilename);
                 $newFilename = $safeFilename.'-'.uniqid().'.'.$images->guessExtension();
 
-                // Move the file to the directory where brochures are stored
+               
                 try {
                     $images->move(
                         $this->getParameter('images_directory'),
                         $newFilename
                     );
                 } catch (FileException $e) {
-                    // ... handle exception if something happens during file upload
+                    // ...
                 }
 
-                // updates the 'brochureFilename' property to store the PDF file name
-                // instead of its contents
+                
                 $trick->setImages($newFilename);
 
                 
@@ -91,22 +97,20 @@ class TrickController extends AbstractController
 
             if ($images) {
                 $originalFilename = pathinfo($images->getClientOriginalName(), PATHINFO_FILENAME);
-                // this is needed to safely include the file name as part of the URL
+                
                 $safeFilename = $slugger->slug($originalFilename);
                 $newFilename = $safeFilename.'-'.uniqid().'.'.$images->guessExtension();
 
-                // Move the file to the directory where brochures are stored
                 try {
                     $images->move(
                         $this->getParameter('images_directory'),
                         $newFilename
                     );
                 } catch (FileException $e) {
-                    // ... handle exception if something happens during file upload
+                    //.......
                 }
 
-                // updates the 'brochureFilename' property to store the PDF file name
-                // instead of its contents
+               
                 $trick->setImages($newFilename);
 
                 
@@ -139,13 +143,49 @@ class TrickController extends AbstractController
         return $this->redirectToRoute('app_home');
     }
 
-    #[Route('/tricks/{id<[0-9]+>}', name: 'app_tricks_show',methods :['GET'])]
-    public function show(Trick $trick,TrickRepository $repo): Response 
+    #[Route('/tricks/{id<[0-9]+>}', name: 'app_tricks_show',methods :['GET','POST'])]
+    public function show(Trick $trick,Request $request,EntityManagerInterface $em,CommentsRepository $commentsRepo  ): Response 
     {
         //$trick = $repo->find($id);
+        
         if(! $trick){
             throw $this->createNotFoundException("Ce trick n'existe pas ");
         }
-        return $this->render("trick/show.html.twig",compact('trick'));
+
+        //$user = new User;
+        $comments = new Comments;
+        $form = $this->createForm(CommentsType::class,$comments);
+        
+        $form->handleRequest($request);
+        if($form->isSubmitted() && $form->isValid()){
+
+             if (!$this->getUser()) {
+            $this->addFlash('info','Vous devrez vous connecter pour pouvoir commenter');
+            return $this->redirectToRoute('app_home');
+            }
+
+            $comments->setUser($this->getUser());
+            $comments->setTrick($trick);
+            $em->persist($comments);
+            $em->flush();
+            
+
+        }
+       $emailUser ='defaultEmail';
+        if($this->getUser()){
+            $emailUser = $this->getUser()->getUserIdentifier();
+        }
+        
+        $emailUser ? $emailUser : 'defaultEmail';
+        $allComments = $commentsRepo->findBy( ['trick'=> $trick]);
+
+        return $this->render("trick/show.html.twig",[
+
+            'allComment'=>$allComments,
+            'trick'=>$trick,
+            'emailUser'=> $emailUser,
+            'formulaire'=>$form->createView()
+        ]);  
+        
     }
 }
