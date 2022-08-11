@@ -72,7 +72,7 @@ class TrickController extends AbstractController
             $trick->setUser($user);
             $em->persist($trick);
             $em->flush();
-            $this->addFlash('success','trick successfully created');
+            $this->addFlash('success','trick créer avec succes');
             return $this->redirectToRoute('app_home');   
 
         }
@@ -138,7 +138,7 @@ class TrickController extends AbstractController
         if($this->isCsrfTokenValid('trick_delete_'.$trick->getId(),$request->request->get('csrf_token'))){
             $em->remove($trick);
             $em->flush();
-            $this->addFlash('info','trick succesfully deleted');
+            $this->addFlash('info','Ce trick a été supprimé avec succes');
         }
         return $this->redirectToRoute('app_home');
     }

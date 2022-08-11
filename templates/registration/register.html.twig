@@ -7,8 +7,8 @@
         <div class="alert alert-danger" role="alert">{{ flash_error }}</div>
     {% endfor %}
     <div class="row">
-    <div class="col-md-6 mx-auto">
-    <h1 class="text-center my-4">Inscription</h1>
+    <div class="col-md-6 mx-auto mt-4 bg-light bg-gradient">
+    <h1 class="text-center my-4">Créer un compte facilement</h1>
 
     {{ form_start(registrationForm) }}
         <div class="row">
@@ -25,7 +25,7 @@
         }) }}
         {{ form_row(registrationForm.agreeTerms) }}
 
-        <button type="submit" class="btn btn-primary btn-lg btn-block">S'inscrir</button>
+        <button type="submit" class="btn btn-primary btn-lg btn-block">Créer un compte</button>
     {{ form_end(registrationForm) }}
         <p class="text-center mt-3 mb-2 text-muted">Avez vous déjà un compte ? <a href="{{path('app_login')}}">se connecter</a></p>
     </div>
