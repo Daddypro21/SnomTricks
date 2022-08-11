@@ -10,6 +10,7 @@ use App\Security\LoginFormAuthenticator;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -28,7 +29,7 @@ class RegistrationController extends AbstractController
     }
 
     #[Route('/register', name: 'app_register')]
-    public function register( Request $request, UserPasswordHasherInterface $userPasswordHasher, UserAuthenticatorInterface $userAuthenticator, LoginFormAuthenticator $authenticator, EntityManagerInterface $entityManager): Response
+    public function register( Request $request, UserPasswordHasherInterface $userPasswordHasher, UserAuthenticatorInterface $userAuthenticator, LoginFormAuthenticator $authenticator, EntityManagerInterface $entityManager,MailerController $mailer): Response
     {
         if ($this->getUser()) {
             $this->addFlash('error','vous êtes déjà connecté');
@@ -51,29 +52,30 @@ class RegistrationController extends AbstractController
             $entityManager->persist($user);
             $entityManager->flush();
 
+            $mailer->sendEmail($user->getEmail());
             // generate a signed url and email it to the user
-            $this->emailVerifier->sendEmailConfirmation('app_verify_email', $user,
-                (new TemplatedEmail())
-                    ->from(new Address(
-                        $this->getParameter('app.mail_from_address'),
-                         $this->getParameter('app.mail_from_name')
-                    ))
-                    ->to($user->getEmail())
-                    ->subject('Please Confirm your Email')
-                    ->htmlTemplate('registration/confirmation_email.html.twig')
-            );
-            // do anything else you need here, like send an email
+        //     $this->emailVerifier->sendEmailConfirmation('app_verify_email', $user,
+        //         (new TemplatedEmail())
+        //             ->from(new Address(
+        //                 $this->getParameter('app.mail_from_address'),
+        //                  $this->getParameter('app.mail_from_name')
+        //             ))
+        //             ->to($user->getEmail())
+        //             ->subject('Please Confirm your Email')
+        //             ->htmlTemplate('registration/confirmation_email.html.twig')
+        //     );
+        //     // do anything else you need here, like send an email
 
-            return $userAuthenticator->authenticateUser(
-                $user,
-                $authenticator,
-                $request
-            );
+        //     return $userAuthenticator->authenticateUser(
+        //         $user,
+        //         $authenticator,
+        //         $request
+        //     );
         }
 
-        return $this->render('registration/register.html.twig', [
-            'registrationForm' => $form->createView(),
-        ]);
+        // return $this->render('registration/register.html.twig', [
+        //     'registrationForm' => $form->createView(),
+        // ]);
     }
 
     #[Route('/verify/email', name: 'app_verify_email')]
