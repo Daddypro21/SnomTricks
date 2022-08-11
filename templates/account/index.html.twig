@@ -12,7 +12,7 @@
             <p class="lead">{{app.user.email}}</p>
             <p ><small> compte créé le {{app.user.createdAt|date('d/m/Y')}}</small></p>
             <P>
-            <a href="{{path('app_account_edit')}}">Editer le compte </a> | <a href="{{path('app_account_changepassword')}}">Changer le mot de passe</a>
+            <a href="{{path('app_account_edit')}}" type="button" class="btn btn-secondary btn-sm ms-2 mb-2">Editer le compte </a> <a href="{{path('app_account_changepassword')}}" type="button" class="btn btn-secondary btn-sm ms-2 mb-2">Changer le mot de passe</a>
             </a>
         </div>
     </div>
