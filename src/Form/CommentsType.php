@@ -14,7 +14,7 @@ class CommentsType extends AbstractType
     {
         $builder
             ->add('content',TextareaType::class,
-             ['label' => 'commentaire' ]
+             ['label' => 'commentaire','attr' => ['class' => 'commentform']]
              )
             //->add('createdAt')
             //->add('user')

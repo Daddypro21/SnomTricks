@@ -3,10 +3,10 @@
 {% block title %}Profil{% endblock %}
 
 {% block body %}
-    <div class="row">
+    <div class="row profil">
         <div class="col-md-6  mx-auto text-center">
             <h1 class="my-5">Profil</h1>
-            <img src="{{app.user.gravatar}}" alt=" avatar de {{app.user.fullName()}}" class=" shadow rounded-circle">
+            <img src="{{asset('images/about.jpg')}}" alt=" avatar de {{app.user.fullName()}}" class=" shadow rounded-circle ">
 
             <h2 class="mt-5">{{app.user.fullName()}}</h2>
             <p class="lead">{{app.user.email}}</p>

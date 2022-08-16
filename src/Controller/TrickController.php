@@ -117,7 +117,7 @@ class TrickController extends AbstractController
             }
             $em->flush();
 
-            $this->addFlash('success','trick successfully updated');
+            $this->addFlash('success','trick mis à jour avec succès');
 
             return $this->redirectToRoute('app_home');
 

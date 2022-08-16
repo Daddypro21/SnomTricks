@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-sm navbar-dark bg-dark " aria-label="Third navbar example">
+ <nav class="navbar navbar-expand-sm navbar-light bg-light flexnav" aria-label="Third navbar example">
     <div class="container">
       <a class="navbar-brand" href="#">SnowTricks</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsExample03" aria-controls="navbarsExample03" aria-expanded="false" aria-label="Toggle navigation">
@@ -6,22 +6,22 @@
       </button>
 
       <div class="collapse navbar-collapse " id="navbarsExample03">
-        <ul class="navbar-nav me-auto mb-2 mb-sm-0 ">
+        <ul class="navbar-nav me-auto mb-2 mb-sm-0 col-md-6 mx-auto">
           <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="{{ path('app_home')}}"><i class="fa-solid fa-house"></i> Accueil</a>
+            <a class="nav-link active" aria-current="page" href="{{ path('app_home')}}"><i class="fa-solid fa-house"></i> <span class="desc">Accueil</span></a>
           </li>
           {% if app.user %}
           <li class="nav-item">
-            <a class="nav-link" href="{{ path('app_tricks_create')}}"> <i class="fa-solid fa-circle-plus"></i> Créer un trick</a>
+            <a class="nav-link" href="{{ path('app_tricks_create')}}"> <i class="fa-solid fa-circle-plus"></i> <span class="desc">Créer un trick</span></a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#" onclick="event.preventDefault(); document.getElementById('js-form-logout').submit();"><i class="fa-solid fa-right-from-bracket"></i> Deconnexion</a>
+            <a class="nav-link" href="#" onclick="event.preventDefault(); document.getElementById('js-form-logout').submit();"><i class="fa-solid fa-right-from-bracket"></i> <span class="desc">Deconnexion</span></a>
           </li>
           <form id="js-form-logout" method="POST" action="{{ path('app_logout')}}" style="display:none;">
             <input type="hidden" name="_csrf_token" value="{{csrf_token('logout')}}">
           </form>
           <li class="nav-item">
-            <a class="nav-link" href="{{path('app_account')}}"><i class="fa-solid fa-user"></i> Compte</a>
+            <a class="nav-link" href="{{path('app_account')}}"><i class="fa-solid fa-user"></i> <span class="desc">Compte</span></a>
           </li>
           {% else %}
           <li class="nav-item">
@@ -32,9 +32,11 @@
           </li>
           {% endif %}
         </ul>
-        {# <form role="search">
-          <input class="form-control" type="search" placeholder="Search" aria-label="Search">
-        </form> #}
       </div>
     </div>
-  </nav>
+  </nav> 
+
+
+
+
+ {# navbar-expand-sm #}

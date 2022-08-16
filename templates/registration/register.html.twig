@@ -6,16 +6,18 @@
     {% for flash_error in app.flashes('verify_email_error') %}
         <div class="alert alert-danger" role="alert">{{ flash_error }}</div>
     {% endfor %}
-    <div class="row">
-    <div class="col-md-6 mx-auto mt-4 bg-light bg-gradient">
-    <h1 class="text-center my-4">Créer un compte facilement</h1>
+    <div class="frame">
+    <div class=" bg-light bg-gradient">
 
+    
+    <div class="form-form">
+    <h1>Créer un compte facilement</h1>
     {{ form_start(registrationForm) }}
         <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-6 col-sm-12">
              {{ form_row(registrationForm.firstName) }}
             </div>
-            <div class="col-md-6">
+            <div class="col-md-6 col-sm-12">
              {{ form_row(registrationForm.lastName) }}
             </div>
         </div>   
@@ -28,6 +30,7 @@
         <button type="submit" class="btn btn-primary btn-lg btn-block">Créer un compte</button>
     {{ form_end(registrationForm) }}
         <p class="text-center mt-3 mb-2 text-muted">Avez vous déjà un compte ? <a href="{{path('app_login')}}">se connecter</a></p>
+    </div>
     </div>
     </div>
 {% endblock %}

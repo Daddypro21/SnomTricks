@@ -49,3 +49,156 @@ article{
     height: 100%; 
     
   } 
+  .main{
+    margin:auto;
+    width: 95%;
+  }
+  .item-container {
+    display:flex;
+    flex-wrap:wrap;
+    
+  }
+
+  .item{
+     max-width: 40%;
+     margin-left: 2px;
+     margin-top :2px;
+     padding: 2px 2px;
+  }
+  article{
+    padding:4px 4px;
+  }
+
+  .form-class{
+    padding-top:4px;
+
+  }
+  .form-form{
+    margin:auto;
+    width:50%;
+  }
+  .frame{
+    margin-top:4px;
+  }
+  .form-form h1{
+    text-align:center;
+    
+  }
+  .about-me{
+    height: 200px;
+    padding-top: 80px;
+    padding-bottom : 80px;
+    margin-bottom: 30px;
+  }
+  .about-me .image-about{
+    margin:auto;
+    width:50%;
+  }
+  .about-me img{
+    width: 300px;
+  }
+
+  .profil img{
+    width: 200px;
+    height: 200;
+  }
+  footer{
+    margin-top:50px;
+  }
+
+  /* media query */
+  @media (max-width: 1000px) { 
+
+    h1{
+        font-size:3.5em;
+    }
+    .item-container {
+        display:flex;
+        flex-direction: column;
+        flex-wrap:nowrap;
+       
+        
+      }
+
+      .item{
+        max-width: 100%;
+        margin-left: 2px;
+        margin-top :4px;
+        padding: 2px 2px;
+     }
+     .item-container .item  article a{
+        font-size:1.7em;
+     }
+
+     .item-container .item  article p{
+        font-size:2.0em;
+     }
+     
+     article .img-pin-index{
+        max-width:100%;
+        max-height: 500px;
+     
+     }
+     .show-paragraphe{
+        font-size:2.2em;
+     }
+
+     .show-publishtime{
+        font-size:1.9em;
+     }
+
+     .show-block article a{
+        font-size:1.8em;
+     }
+
+     .show-commentaire input{
+        font-size: 2.0em;
+     }
+     .titre3{
+        font-size:2.0em;
+     }
+     .commentform{
+        height:500px;
+        background: rgba(0,0,0,0.10);
+     }
+
+    label{
+        font-size:1.8em;
+    }
+
+    .form-class{
+        /* padding-top:8px; */
+    
+      }
+      .form-form label{
+        font-size:2.5em;
+      }
+      .frame{
+        margin-top:200px;
+        
+      }
+      .form-form button{
+        font-size:2.0em;
+      }
+      form .form-text{
+        height: 100px;
+        font-size:2.0em;
+      }
+      form .check-b{
+        height: 25px;
+        width:25px;
+      }
+      form .pass-forget{
+        font-size:2.0em;
+      }
+      .form-form p{
+        font-size:2.0em;
+      }
+      .form-form h1{
+        font-size :3.0em;
+      }
+
+      footer p {
+        font-size:2.5em;
+      }
+  }
