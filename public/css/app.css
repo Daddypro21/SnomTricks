@@ -127,11 +127,11 @@ article{
         padding: 2px 2px;
      }
      .item-container .item  article a{
-        font-size:1.7em;
+        font-size:1.0em;
      }
 
      .item-container .item  article p{
-        font-size:2.0em;
+        font-size:1.0em;
      }
      
      article .img-pin-index{
@@ -140,30 +140,30 @@ article{
      
      }
      .show-paragraphe{
-        font-size:2.2em;
+        font-size:1.2em;
      }
 
      .show-publishtime{
-        font-size:1.9em;
+        font-size:1.0em;
      }
 
      .show-block article a{
-        font-size:1.8em;
+        font-size:1.0em;
      }
 
      .show-commentaire input{
-        font-size: 2.0em;
+        font-size: 1.0em;
      }
      .titre3{
-        font-size:2.0em;
+        font-size:1.0em;
      }
      .commentform{
-        height:500px;
+        height:150px;
         background: rgba(0,0,0,0.10);
      }
 
     label{
-        font-size:1.8em;
+        font-size:1.2em;
     }
 
     .form-class{
@@ -171,34 +171,83 @@ article{
     
       }
       .form-form label{
-        font-size:2.5em;
+        font-size:1.0em;
       }
       .frame{
-        margin-top:200px;
+        /* margin-top:200px; */
         
       }
       .form-form button{
-        font-size:2.0em;
+        /*font-size:1.0em;*/
       }
       form .form-text{
-        height: 100px;
-        font-size:2.0em;
+        /* height: 100px; */
+        font-size:1.0em;
       }
       form .check-b{
-        height: 25px;
-        width:25px;
+        /* height: 25px;
+        width:25px; */
       }
       form .pass-forget{
-        font-size:2.0em;
+        font-size:1.0em;
       }
       .form-form p{
-        font-size:2.0em;
+        font-size:1.0em;
       }
       .form-form h1{
-        font-size :3.0em;
+        margin-top:12px;
+        font-size :1.5em;
       }
 
       footer p {
-        font-size:2.5em;
+        font-size:1.2em;
       }
+  }
+
+  @media screen and (max-width: 576px){
+    .label-form{
+      font-size:12px;
+      
+    }
+    .label-label{
+      margin-top:12px;
+    }
+
+    .item-container .item  article a{
+      font-size:1.0em;
+   }
+
+   .item-container .item  article p{
+      font-size:1.0em;
+   }
+   footer p {
+    font-size:1.0em;
+  }
+
+  .show-paragraphe{
+    font-size:1.0em;
+ }
+
+ .show-publishtime{
+    font-size:1.0em;
+ }
+
+ .show-block article a{
+    font-size:1.0em;
+ }
+
+ .show-commentaire input{
+    font-size: 1.0em;
+ }
+ .titre3{
+    font-size:2.0em;
+ }
+ .commentform{
+    height:100px;
+    background: rgba(0,0,0,0.10);
+ }
+
+label{
+    font-size:1.0em;
+}
   }
