@@ -52,7 +52,14 @@ class RegistrationController extends AbstractController
             $entityManager->persist($user);
             $entityManager->flush();
 
-            $mailer->sendEmail($user->getEmail());
+            $mailer->sendEmail(
+                'no-replay@snowtrick.com',
+                $user->getEmail(),
+                'activation de votre compte sur le site snowtrick',
+                'register',
+                compact('user')
+            );
+            $this->addFlash('success', 'vous avez reçu un email dans votre boite d\'email');
             // generate a signed url and email it to the user
         //     $this->emailVerifier->sendEmailConfirmation('app_verify_email', $user,
         //         (new TemplatedEmail())
