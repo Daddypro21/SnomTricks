@@ -159,7 +159,8 @@ class TrickController extends AbstractController
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid()){
 
-             if (!$this->getUser()) {
+            //Si vous n'êtes pas connecté vous ne pouvez pas commenter
+            if (!$this->getUser()) {
             $this->addFlash('info','Vous devrez vous connecter pour pouvoir commenter');
             return $this->redirectToRoute('app_home');
             }
@@ -169,7 +170,7 @@ class TrickController extends AbstractController
             $em->persist($comments);
             $em->flush();
             
-
+            return $this->redirectToRoute('app_tricks_show',['id'=>$trick->getId()]);
         }
        $emailUser ='defaultEmail';
         if($this->getUser()){
@@ -177,7 +178,7 @@ class TrickController extends AbstractController
         }
         
         $emailUser ? $emailUser : 'defaultEmail';
-        $allComments = $commentsRepo->findBy( ['trick'=> $trick]);
+        $allComments = $commentsRepo->findBy( ['trick'=> $trick],['createdAt'=>'DESC']);
 
         return $this->render("trick/show.html.twig",[
 

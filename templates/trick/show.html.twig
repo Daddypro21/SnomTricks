@@ -3,24 +3,31 @@
 {% block title %}detail-trick{% endblock %}
 
 {% block body %}
-
- <h1 class="text-center mb-5 mt-5 bg-dark">{{ trick.title}}</h1>
- 
-    <div class=" show-block">
-        <article class="  bg-white rounded shadow ps-2 pe-2">
-        <h5 class="text-decoration-none text-center mt-3 mb-3 text-muted">{{ trick.title}}</h5>
-        <img src="{{trick.images ? asset('uploads/images/' ~ trick.images) : asset('images/placeholder.jpg') }}" alt="{{ trick.title }}" class="img-trick-index w-100 rounded-top ">
+    <div class="container image-back mt-5 ps-4 pt-2" style="background :url({{trick.images ? asset('uploads/images/' ~ trick.images) : asset('images/placeholder.jpg') }});height: 75vh;background-repeat: no-repeat;  background-size: cover;">
         
-        <a href="#" class="btn btn-success btn-sm sm-2 mt-2 ms-2" type="button"><i class="fa-solid fa-heart"></i></a>
-        <a href="{{path('app_home')}}" class="btn btn-danger btn-sm sm-2 mt-2 ms-2" type="button"><i class="fa-solid fa-left-long"></i></a>
+        
+    </div>
+    <div class="container mt-4 mb-4">
+        <div class="row">
+            <div class="col-sm-12 col-md-6 bg-white rounded shadow ps-2 pe-2 pt-2 pb-2">
+            <img src="{{trick.images ? asset('uploads/images/' ~ trick.images) : asset('images/placeholder.jpg') }}" alt="{{ trick.title }}" class="w-100 rounded-top">
+            </div>
+            <div class="col-sm-12 col-md-6">
+            <iframe src="UyUkmZ5y3ZQ">
+            
+            </iframe>
+            </div>
+        </div>
+        <p class="text-center mt-4 mb-4">{{ trick.title }}</p>
+ </div>
+    <div class=" show-block mt-2">
+        <article class="  bg-white rounded shadow ps-2 pe-2">
         <p class="pt-5 text-break ms-2 show-paragraphe">{{ trick.description }}</p>
-        <p> <small class="text-muted ms-2 show-publishtime">Publié il y'a de cela {{ trick.createdAt|ago}} par {{ trick.user.firstName}} {{ trick.user.lastName}}</small></p>
+        <p> <small class="text-muted ms-2 show-publishtime">Publié il y a de cela {{ trick.createdAt|ago}} par {{ trick.user.firstName}} {{ trick.user.lastName}}</small></p>
         {% if trick.user.email != null %}
         {% if (emailUser != null) and (emailUser is same as(trick.user.email)) %}
         <a href="{{ path('app_tricks_edit',{id: trick.id })}}" type="button" class="btn btn-secondary btn-sm ms-2 mb-2">Edit </a>
-        {# <button type="button" class="btn btn-secondary btn-sm">Small button</button> #}
         <a href="#" onclick=" event.preventDefault(); confirm('Voulez vous vraiment supprimer ce trick ?') && document.getElementById('js-pin-form-delete').submit();" class="btn btn-secondary btn-sm sm-2 mb-2" type="button"> delete  </a>
-        {# <a href="#" onclick=" event.preventDefault(); confirm('Are you sure') && document.getElementById('js-pin-form-delete').submit();"> delete | </a> #}
         <a href="{{ path('app_home')}}" class="btn btn-secondary btn-sm sm-2 mb-2" type="button">Retour</a>
 
         <form method="POST" id="js-pin-form-delete" action=" {{path('app_tricks_delete',{id: trick.id })}}"  style="Display:none;">
@@ -32,20 +39,25 @@
         </article>
         
     </div>
+{% if trick.user.email != null %}
 <div class="mt-5 show-commentaire">
 <div class="row">
 <div class="col-md-6 mx-auto">
-    {{ form_start(formulaire) }}
+    
+        {{ form_start(formulaire) }}
 
-    {{form_widget(formulaire)}}
-    <div class="d-grid gap-2 col-6 mx-auto">
-    <input type="submit" value="commentaire" class="btn btn-primary btn-block"/>
-   </div>
- {{ form_end(formulaire) }}
+        {{form_widget(formulaire)}}
+        <div class="d-grid gap-2 col-6 mx-auto">
+        <input type="submit" value="commentaire" class="btn btn-primary btn-block"/>
+        </div>
+        {{ form_end(formulaire) }}
+    
 </div>
 </div>
 </div>
-
+{% else %}
+    <div class="bg-info pt-3 pb-3"><p class="text-center" >Vous devrez vous connecter pour commenter </p></div>
+{% endif %}
 <div class="mt-5 show-commentaires">
 <div class="row">
 <div class="col-md-6 mx-auto">
@@ -56,7 +68,7 @@
             {% for comment in allComment %}       
                 <h5>{{comment.user.firstName}} {{comment.user.lastName}}</h5>
                 <p class="mt-2 text-break">{{ comment.content}}</p>
-                <p class="text-muted">posté il y' a de cela {{ comment.createdAt|ago}} par {{ comment.user.firstName}} </p>                   
+                <p class="text-muted">posté il y a de cela {{ comment.createdAt|ago}} par {{ comment.user.firstName}} </p>                   
             {% endfor %}
  {% else %}
  <h2 class='h1 text-center mt-5 '> pas de commentaire </h2>

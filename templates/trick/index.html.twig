@@ -13,14 +13,6 @@
                 <u class="text-decoration-none">Slim Ndema M " Daddypro21"</u>
             </a>
         </p>
-            <div class="form-outline col-md-6 mx-auto mb-4">
-            <input type="search" class="form-control bg-light" id="datatable-search-input"placeholder="ce moteur de recherche est statique,il n'a pas été démandé dans le projet" >
-            <label class="form-label label-label" for="datatable-search-input"><span class="label-form">Recherche</span></label>
-            </div>
-            <div id="datatable">
-            </div>
-        
-        {# <a href="https://github.com/Daddypro21/SnowTricks.git" role="button" class="btn btn-primary px-5">Voir le dépot github</a> #}
          <a class="btn btn-dark px-5" target="_blank" href="https://github.com/Daddypro21/SnowTricks.git" role="button">GitHub <i class="fab fa-github ms-2"></i></a>
     </div>
 </div>
@@ -36,9 +28,6 @@
 
 
  {% if tricks|length > 0 %}
-    {# {% for row in tricks|batch(3) %}  #}
-
-        {# <div class="row mb-5"> #}
         <div class=" item-container">
         
             {% for trick in tricks %}
@@ -47,21 +36,17 @@
                      <article class="bg-white rounded shadow"> 
                         <h5 class="text-center pt-2 pb-2"><a href="{{ path('app_tricks_show', {id: trick.id} )}}" class=" text-lowercase text-decoration-none text-muted ">{{ trick.title}}</a></h5>
                         <a href="{{ path('app_tricks_show', {id: trick.id} )}}"><img src="{{trick.images ? asset('uploads/images/' ~ trick.images) : asset('images/placeholder.jpg') }}" alt="{{ trick.title }}" class="img-pin-index w-100 rounded-top"></a>
-                        {# <p class="mt-2">{{ trick.description|u.truncate(8, '...') }}</p> #}
-                        <p class="mt-2 ms-2" ><small class="text-muted  ">Publié il y'a de cela {{ trick.createdAt|ago}}</small></p>
-                        <p class="mt-2 ms-2" ><small class="text-muted  ">par @ {{ trick.user.firstName}} {{ trick.user.lastName}}</small></p>
+                        <p class="mt-2 ms-2" ><small class="text-muted  ">Publié il y a de cela {{ trick.createdAt|ago}}</small></p>
+                        <p class="mt-2 ms-2" ><small class="text-muted  ">par {{ trick.user.firstName}} {{ trick.user.lastName}}</small></p>
 
                         <a href="{{ path('app_tricks_show', {id: trick.id} )}}" class="btn btn-primary btn-sm sm-2 mb-2 ms-2" type="button"><i class="fa-solid fa-eye"></i></a>
-                        <a href="{{ path('app_tricks_show', {id: trick.id} )}}" class="btn btn-success btn-sm sm-2 mb-2 ms-2" type="button"><i class="fa-solid fa-heart"></i></a>
+                       
                      </article> 
                 </div>
                   
             {% endfor %}
             
            </div>
-        {# </div> #}
-       
-    {# {% endfor %} #}
  {% else %}
  <h2 class='h1 text-center mt-5'> pas de trick #0 <a href="{{ path('app_tricks_create')}}">soyez le premier à créer un trick</a></h2>
 {% endif %} 

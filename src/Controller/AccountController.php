@@ -13,6 +13,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
+
 class AccountController extends AbstractController
 {
     #[Route('/account', name: 'app_account')]
@@ -46,14 +47,13 @@ class AccountController extends AbstractController
     #[Route('/account/change-password', name: 'app_account_changepassword', methods:['POST','GET'])]
     public function changePassword( Request $request,EntityManagerInterface $em,UserPasswordHasherInterface $userPasswordHasher): Response 
     {
+        
         $user = new User;
-        //$user = $this->getUser();
         $form = $this->createForm(ChangePasswordFormType::class);
-        //dd($form['plainPassword']->getData());
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid()){
-            $user->setPassword($userPasswordHasher->hashPassword( $user,$form['change_password_form']->getData()));
+            $user->setPassword($userPasswordHasher->hashPassword( $user,$form['plainPassword']->getData()));
             
             $em->flush();
 
