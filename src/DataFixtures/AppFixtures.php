@@ -22,23 +22,24 @@ class AppFixtures extends Fixture
         // $product = new Product();
         // $manager->persist($product);
         $user = new User();
-        $user->setFirstName('Morgan');
-        $user->setLastName('Morgan');
-        $user->setEmail('morgan@net.com');
-       
-
+        $user->setFirstName('Joshua');
+        $user->setLastName('Joshua');
+        $user->setEmail('Joshua@net.com');
         $password = $this->hasher->hashPassword($user,'123456');
         $user->setPassword( $password );
-        
-            $trick = new Trick();
-            $trick->setTitle('trick fake');
-            $trick->setImages('fake1.jpg');
-            $trick->setDescription('Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad');
-            $trick->getUser();
+         $manager->persist($user);
+        for ($i = 0; $i < 6; $i++) {
 
+            $trick = new Trick();
+            $trick->setTitle('trick fake'.$i);
+            $trick->setImages('fake.jpg');
+            $trick->setDescription('Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad');
+            $trick->setUser($user);
+            $manager->persist($trick);
+            
+        }
         
-        
-        $manager->persist($user);
         $manager->flush();
+       
     }
 }
