@@ -1,22 +1,30 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}detail-trick{% endblock %}
+{% block title %}detail-{{ trick.title }} {% endblock %}
 
 {% block body %}
-    <div class="container image-back mt-5 ps-4 pt-2" style="background :url({{trick.images ? asset('uploads/images/' ~ trick.images) : asset('images/placeholder.jpg') }});height: 75vh;background-repeat: no-repeat;  background-size: cover;">
+
+{% if trick.cover is not null %}
+    <div class="container image-back mt-5 bg-white rounded shadow ps-4 pt-2" style="background :url({{trick.cover ? asset('uploads/images/' ~ trick.cover) : asset('images/placeholder.jpg') }});height: 75vh;background-repeat: no-repeat;  background-size: cover;">
         
         
     </div>
+{% endif %}
     <div class="container mt-4 mb-4">
         <div class="row">
             <div class="col-sm-12 col-md-6 bg-white rounded shadow ps-2 pe-2 pt-2 pb-2">
             <img src="{{trick.images ? asset('uploads/images/' ~ trick.images) : asset('images/placeholder.jpg') }}" alt="{{ trick.title }}" class="w-100 rounded-top">
             </div>
+            {% if trick.video is not null %}
             <div class="col-sm-12 col-md-6">
-            <iframe src="UyUkmZ5y3ZQ">
-            
-            </iframe>
+            <iframe title="YouTube video player" src="https://www.youtube.com/embed/{{trick.video }}"  frameborder="0" allowfullscreen></iframe>
             </div>
+            {% else %}
+            <div class="col-sm-12 col-md-6">
+              <p class=" mt-5 me-5 text-muted">Ce trick n'a pas de vidéo</p>
+            </div>
+            {% endif %}
+
         </div>
         <p class="text-center mt-4 mb-4">{{ trick.title }}</p>
  </div>
@@ -39,7 +47,8 @@
         </article>
         
     </div>
-{% if trick.user.email != null %}
+    
+{% if app.user.email is defined %}
 <div class="mt-5 show-commentaire">
 <div class="row">
 <div class="col-md-6 mx-auto">

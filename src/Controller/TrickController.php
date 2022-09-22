@@ -47,6 +47,8 @@ class TrickController extends AbstractController
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid()){
             $images = $form->get('images')->getData();
+            $video = $form->get('video')->getData();
+            $cover = $form->get('cover')->getData();
 
             if ($images) {
                 $originalFilename = pathinfo($images->getClientOriginalName(), PATHINFO_FILENAME);
@@ -68,6 +70,46 @@ class TrickController extends AbstractController
                 $trick->setImages($newFilename);
 
                 
+            }
+
+            if ($cover) {
+              
+                $originalFilename = pathinfo($cover->getClientOriginalName(), PATHINFO_FILENAME);
+                
+                $safeFilename = $slugger->slug($originalFilename);
+                $newFilename = $safeFilename.'-'.uniqid().'.'.$cover->guessExtension();
+
+               
+                try {
+                    $cover->move(
+                        $this->getParameter('images_directory'),
+                        $newFilename
+                    );
+                } catch (FileException $e) {
+                    // ...
+                }
+                $trick->setCover($newFilename);
+
+                
+            }
+
+            if($video){
+                $regexYoutube = '/https:\/\/www\.youtube\.com\/watch\?v=([a-zA-Z0-9_\-]*)/m';
+                $resultYoutube = preg_match($regexYoutube, $video, $matches);
+
+                if($resultYoutube) {
+                   $rest = explode('?',$matches[0]);
+                    if($rest[0] ==='https://www.youtube.com/watch'){
+                        $trick->setVideo($matches[1]);
+                    }
+                    else{
+                        $this->addFlash('info','faites entrer une url youtube');
+                    }
+                    
+                }
+                else{
+                    $this->addFlash('info','faites entrer une url youtube');
+                }
             }
             $trick->setUser($user);
             $em->persist($trick);
@@ -94,6 +136,8 @@ class TrickController extends AbstractController
         if($form->isSubmitted() && $form->isValid()){
 
             $images = $form->get('images')->getData();
+            $video = $form->get('video')->getData();
+            $cover = $form->get('cover')->getData();
 
             if ($images) {
                 $originalFilename = pathinfo($images->getClientOriginalName(), PATHINFO_FILENAME);
@@ -114,6 +158,47 @@ class TrickController extends AbstractController
                 $trick->setImages($newFilename);
 
                 
+            }
+
+            if ($cover) {
+                $originalFilename = pathinfo($cover->getClientOriginalName(), PATHINFO_FILENAME);
+                
+                $safeFilename = $slugger->slug($originalFilename);
+                $newFilename = $safeFilename.'-'.uniqid().'.'.$cover->guessExtension();
+
+               
+                try {
+                    $cover->move(
+                        $this->getParameter('images_directory'),
+                        $newFilename
+                    );
+                } catch (FileException $e) {
+                    // ...
+                }
+
+                
+                $trick->setCover($newFilename);
+
+                
+            }
+
+            if($video){
+                $regexYoutube = '/https:\/\/www\.youtube\.com\/watch\?v=([a-zA-Z0-9_\-]*)/m';
+                $resultYoutube = preg_match($regexYoutube, $video, $matches);
+
+                if($resultYoutube) {
+                    $rest = explode('?',$matches[0]);
+                    if($rest ==='https://www.youtube.com/watch'){
+                        $trick->setVideo($matches[1]);
+                    }
+                    else{
+                        $this->addFlash('info','faites entrer une url youtube');
+                    }
+                    
+                }
+                else{
+                    $this->addFlash('info','faites entrer une url youtube');
+                }
             }
             $em->flush();
 

@@ -18,6 +18,21 @@ class TrickType extends AbstractType
         $builder
             ->add('title',TextType::class,['label'=>'Titre','attr' => ['class' => 'form-text']])
             ->add('description',TextareaType::class,['label'=>'Description','attr' => ['class' => 'commentform']])
+            ->add('cover', FileType::class, [
+                'label' => 'image de couverture (JPG,PNG FILE)',
+                'mapped' => false,
+                'required' => true,
+                // 'constraints' => [
+                //     new File([
+                //         'maxSize' => '1024k',
+                //         'mimeTypes' => [
+                //             'application/jpg',
+                //             'application/png',
+                //         ],
+                //         'mimeTypesMessage' => 'Please upload a valid image',
+                //     ])
+                // ]
+                ])
             ->add('images', FileType::class, [
                 'label' => 'image (JPG,PNG FILE)',
                 'mapped' => false,
@@ -32,6 +47,12 @@ class TrickType extends AbstractType
                 //         'mimeTypesMessage' => 'Please upload a valid image',
                 //     ])
                 // ]
+                ])
+
+                ->add('video', TextType::class, [
+                    'label' => 'Url (youtube video)',
+                    'mapped' => false,
+                    'required' => true,
                 ])
             //->add('createdAt')
             //->add('UpdateAt')
