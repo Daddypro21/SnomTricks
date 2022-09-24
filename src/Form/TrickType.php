@@ -3,6 +3,8 @@
 namespace App\Form;
 
 use App\Entity\Trick;
+use App\Form\VideoType;
+use App\Form\ImageType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints\File;
@@ -10,6 +12,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 
 class TrickType extends AbstractType
 {
@@ -22,40 +25,26 @@ class TrickType extends AbstractType
                 'label' => 'image de couverture (JPG,PNG FILE)',
                 'mapped' => false,
                 'required' => true,
-                // 'constraints' => [
-                //     new File([
-                //         'maxSize' => '1024k',
-                //         'mimeTypes' => [
-                //             'application/jpg',
-                //             'application/png',
-                //         ],
-                //         'mimeTypesMessage' => 'Please upload a valid image',
-                //     ])
-                // ]
+                
                 ])
-            ->add('images', FileType::class, [
-                'label' => 'image (JPG,PNG FILE)',
-                'mapped' => false,
-                'required' => true,
-                // 'constraints' => [
-                //     new File([
-                //         'maxSize' => '1024k',
-                //         'mimeTypes' => [
-                //             'application/jpg',
-                //             'application/png',
-                //         ],
-                //         'mimeTypesMessage' => 'Please upload a valid image',
-                //     ])
-                // ]
-                ])
-
-                ->add('video', TextType::class, [
-                    'label' => 'Url (youtube video)',
-                    'mapped' => false,
-                    'required' => true,
-                ])
-            //->add('createdAt')
-            //->add('UpdateAt')
+            ->add('images', CollectionType::class, [
+                'entry_type' => ImageType::class,
+                'allow_add' => true,
+                'allow_delete' => true,
+                'attr' => [
+                    'class' => 'collection'
+                ],
+                'by_reference' => false
+            ])
+            ->add('videos', CollectionType::class, [
+                'entry_type' => VideoType::class,
+                'allow_add' => true,
+                'allow_delete' => true,
+                'attr' => [
+                    'class' => 'collection'
+                ],
+                'by_reference' => false
+            ])
         ;
     }
 
@@ -65,4 +54,9 @@ class TrickType extends AbstractType
             'data_class' => Trick::class,
         ]);
     }
+
+    
+
+    
+
 }

@@ -9,4 +9,42 @@
 
    {{include('trick/form.html.twig',{'submitButtonText':'creer un trick'}) }}
    </div>
+   <script>
+        const collections = document.querySelectorAll('.collection');
+
+        for (let collection of collections) {
+            const addButton = document.createElement('button');
+            addButton.innerText = 'Add';
+            addButton.type = 'button';
+
+            addButton.addEventListener('click', (e) => {
+                e.preventDefault();
+
+                const divPrototype = document.createElement('div');
+
+                let prototype = collection.dataset.prototype
+                    .replace(/__name__label__/g, 'Website')
+                    .replace(/__name__/g, Date.now() + Math.floor(Math.random() * 100));
+
+                divPrototype.innerHTML = prototype;
+
+                const removeButton = document.createElement('button');
+                removeButton.innerText = 'Remove';
+                removeButton.type = 'button';
+
+                removeButton.addEventListener('click', (e) => {
+                    e.preventDefault();
+
+                    divPrototype.remove();
+                });
+
+                divPrototype.appendChild(removeButton);
+                collection.prepend(divPrototype);
+
+                console.log(prototype);
+            });
+
+            collection.appendChild(addButton);
+        }
+    </script>
 {% endblock %}

@@ -7,6 +7,7 @@ use App\Entity\Trick;
 use App\Form\TrickType;
 use App\Entity\Comments;
 use App\Form\CommentsType;
+use App\Service\UploaderService;
 use App\Repository\TrickRepository;
 use App\Repository\CommentsRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -34,7 +35,7 @@ class TrickController extends AbstractController
     }
 
     #[Route('/tricks/create', name: 'app_tricks_create',methods :['GET','POST'])]
-    public function create(Request $request,EntityManagerInterface $em ,UserInterface $user,SluggerInterface $slugger):Response 
+    public function create(Request $request,EntityManagerInterface $em ,UserInterface $user ,UploaderService $uploaderService,TrickRepository $trickRepository,SluggerInterface $slugger):Response 
     {
         if (!$this->getUser()) {
             $this->addFlash('info','Vous devrez vous connecter avant de créer un trick');
@@ -46,34 +47,9 @@ class TrickController extends AbstractController
            
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid()){
-            $images = $form->get('images')->getData();
-            $video = $form->get('video')->getData();
             $cover = $form->get('cover')->getData();
 
-            if ($images) {
-                $originalFilename = pathinfo($images->getClientOriginalName(), PATHINFO_FILENAME);
-                
-                $safeFilename = $slugger->slug($originalFilename);
-                $newFilename = $safeFilename.'-'.uniqid().'.'.$images->guessExtension();
-
-               
-                try {
-                    $images->move(
-                        $this->getParameter('images_directory'),
-                        $newFilename
-                    );
-                } catch (FileException $e) {
-                    // ...
-                }
-
-                
-                $trick->setImages($newFilename);
-
-                
-            }
-
             if ($cover) {
-              
                 $originalFilename = pathinfo($cover->getClientOriginalName(), PATHINFO_FILENAME);
                 
                 $safeFilename = $slugger->slug($originalFilename);
@@ -88,42 +64,28 @@ class TrickController extends AbstractController
                 } catch (FileException $e) {
                     // ...
                 }
-                $trick->setCover($newFilename);
 
-                
-            }
-
-            if($video){
-                $regexYoutube = '/https:\/\/www\.youtube\.com\/watch\?v=([a-zA-Z0-9_\-]*)/m';
-                $resultYoutube = preg_match($regexYoutube, $video, $matches);
-
-                if($resultYoutube) {
-                   $rest = explode('?',$matches[0]);
-                    if($rest[0] ==='https://www.youtube.com/watch'){
-                        $trick->setVideo($matches[1]);
-                    }
-                    else{
-                        $this->addFlash('info','faites entrer une url youtube');
-                    }
-                    
-                }
-                else{
-                    $this->addFlash('info','faites entrer une url youtube');
-                }
-            }
+             
+            $trick->setCover($newFilename);
             $trick->setUser($user);
+            $trickRepository->add($trick, true); 
             $em->persist($trick);
             $em->flush();
             $this->addFlash('success','trick créer avec succes');
             return $this->redirectToRoute('app_home');   
 
+        }  
+         
         }
-        return $this->render('trick/create.html.twig',
-        ['formulaire'=>$form->createView()]); 
+            return $this->render('trick/create.html.twig',
+            [
+                'trick'=> $trick,
+                'formulaire'=>$form->createView()
+            ]);
     }
 
     #[Route('/tricks/{id<[0-9]+>}/edit', name: 'app_tricks_edit',methods:["GET","PUT","POST"])]
-    public function edit(Trick $trick,Request $request,EntityManagerInterface $em,SluggerInterface $slugger):Response 
+    public function edit(Trick $trick,Request $request,EntityManagerInterface $em,UserInterface $user,SluggerInterface $slugger,UploaderService $uploaderService,TrickRepository $trickRepository):Response 
     {
 
         if (!$this->getUser()) {
@@ -134,31 +96,7 @@ class TrickController extends AbstractController
     
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid()){
-
-            $images = $form->get('images')->getData();
-            $video = $form->get('video')->getData();
             $cover = $form->get('cover')->getData();
-
-            if ($images) {
-                $originalFilename = pathinfo($images->getClientOriginalName(), PATHINFO_FILENAME);
-                
-                $safeFilename = $slugger->slug($originalFilename);
-                $newFilename = $safeFilename.'-'.uniqid().'.'.$images->guessExtension();
-
-                try {
-                    $images->move(
-                        $this->getParameter('images_directory'),
-                        $newFilename
-                    );
-                } catch (FileException $e) {
-                    //.......
-                }
-
-               
-                $trick->setImages($newFilename);
-
-                
-            }
 
             if ($cover) {
                 $originalFilename = pathinfo($cover->getClientOriginalName(), PATHINFO_FILENAME);
@@ -176,41 +114,22 @@ class TrickController extends AbstractController
                     // ...
                 }
 
-                
-                $trick->setCover($newFilename);
-
-                
-            }
-
-            if($video){
-                $regexYoutube = '/https:\/\/www\.youtube\.com\/watch\?v=([a-zA-Z0-9_\-]*)/m';
-                $resultYoutube = preg_match($regexYoutube, $video, $matches);
-
-                if($resultYoutube) {
-                    $rest = explode('?',$matches[0]);
-                    if($rest ==='https://www.youtube.com/watch'){
-                        $trick->setVideo($matches[1]);
-                    }
-                    else{
-                        $this->addFlash('info','faites entrer une url youtube');
-                    }
-                    
-                }
-                else{
-                    $this->addFlash('info','faites entrer une url youtube');
-                }
-            }
+             
+            $trick->setCover($newFilename);
+            $trick->setUser($user);
+            $trickRepository->add($trick, true); 
             $em->flush();
+            $this->addFlash('success','trick créer avec succes');
+            return $this->redirectToRoute('app_home');   
 
-            $this->addFlash('success','trick mis à jour avec succès');
-
-            return $this->redirectToRoute('app_home');
-
+        }  
+         
         }
-        return $this->render('trick/edit.html.twig',[
-            'formulaire'=>$form->createView(),
-            'trick'=>$trick
-        ]);
+            return $this->render('trick/edit.html.twig',
+            [
+                'trick'=> $trick,
+                'formulaire'=>$form->createView()
+            ]);
     }
 
     #[Route('/tricks/{id<[0-9]+>}/delete', name: 'app_tricks_delete',methods :["GET","POST"])]
