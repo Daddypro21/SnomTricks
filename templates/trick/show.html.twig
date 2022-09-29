@@ -3,12 +3,17 @@
 {% block title %}detail-{{ trick.title }} {% endblock %}
 
 {% block body %}
-    <div class="container image-back mt-5 ps-4 pt-2" style="background :url({{trick.cover ? asset('uploads/images/' ~ trick.cover) : asset('images/placeholder.jpg') }});height: 75vh;background-repeat: no-repeat;  background-size: cover;">
+    <div class="container-fluid bg-dark pt-5 pb-5">
+    <div class="container image-back mt-5 ps-4 pt-2 bg-white rounded shadow ps-2 pe-2" style="background :url({{trick.cover ? asset('uploads/images/' ~ trick.cover) : asset('images/placeholder.jpg') }});height: 75vh;background-repeat: no-repeat;  background-size: cover;">
+        <div class="container py-5 text-center ">
+            <h1 class=" font-weight-bold text-white ">{{trick.title}}</h1>
+        </div>
+    </div>
     </div>
     <div class="container mt-4 mb-4">
         <div class="row">
-            <div class="col-sm-12 col-md-6 ">    
-                <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
+            <div class="col-sm-12 col-md-6 bg-white rounded shadow pt-2 pb-2 ps-2 pe-2">    
+                <div id="carouselExampleControls" class="carousel slide"  data-ride="carousel" >
                     <div class="carousel-inner">
                         <div class="carousel-item active ">
                         <img src="{{trick.cover ? asset('uploads/images/' ~ trick.cover) : asset('images/placeholder.jpg') }}" alt="{{ trick.title }}"  class="rounded-top d-block w-100">
@@ -55,8 +60,8 @@
        
             
 </div>
-
-        <p class="text-center mt-4 mb-4">{{ trick.title }}</p>
+ 
+        <h4 class="text-center mt-4 mb-4">{{ trick.title }} </h4>
  </div>
 
 
@@ -67,7 +72,7 @@
     <div class=" show-block mt-2">
         <article class="  bg-white rounded shadow ps-2 pe-2">
         <p class="pt-5 text-break ms-2 show-paragraphe">{{ trick.description }}</p>
-        <p> <small class="text-muted ms-2 show-publishtime">Publié il y a de cela {{ trick.createdAt|ago}} par {{ trick.user.firstName}} {{ trick.user.lastName}}</small></p>
+        <p> <small class="text-muted ms-2 show-publishtime"> <b>Auteur</b> : {{ trick.user.firstName}} {{ trick.user.lastName}} | <b>date de publication</b> : {{ trick.createdAt|ago}} </small></p>
         {% if trick.user.email != null %}
         {% if (emailUser != null) and (emailUser is same as(trick.user.email)) %}
         <a href="{{ path('app_tricks_edit',{id: trick.id })}}" type="button" class="btn btn-secondary btn-sm ms-2 mb-2">Edit </a>
@@ -101,7 +106,7 @@
 </div>
 </div>
 {% else %}
-    <div class="bg-info pt-3 pb-3"><p class="text-center" >Vous devrez vous connecter pour commenter </p></div>
+    <div class=" container bg-info pt-3 pb-3 mt-5"><p class="text-center" >Vous devrez vous connecter pour commenter </p></div>
 {% endif %}
 <div class="mt-5 show-commentaires">
 <div class="row">
