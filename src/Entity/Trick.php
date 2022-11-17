@@ -2,14 +2,17 @@
 
 namespace App\Entity;
 
-use App\Repository\TrickRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\TrickRepository;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 #[ORM\Entity(repositoryClass: TrickRepository::class)]
 #[ORM\HasLifecycleCallbacks()]
+#[UniqueEntity(fields: ['title'], message: 'il y a dejà un trick avec ce nom')]
+#[UniqueEntity(fields: ['slug'], message: 'il y a dejà un trick avec ce nom')]
 class Trick
 {
     #[ORM\Id]
@@ -17,7 +20,7 @@ class Trick
     #[ORM\Column()]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255,unique: true)]
     private ?string $title = null;
 
     #[ORM\Column(type: Types::TEXT)]
@@ -44,6 +47,9 @@ class Trick
 
     #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Video::class,cascade: ['persist', 'remove'])]
     private Collection $videos;
+
+    #[ORM\Column(length: 255,unique: true)]
+    private ?string $slug = null;
 
     public function __construct()
     {
@@ -228,5 +234,22 @@ class Trick
         }
 
         return $this;
+    }
+
+    public function getSlug(): ?string
+    {
+        return $this->slug;
+    }
+
+    public function setSlug(string $slug): self
+    {
+        $this->slug = $slug;
+
+        return $this;
+    }
+
+    public function getNewSlug(): string
+    {
+       return $newSlug = str_replace('-','_', $this->getSlug());
     }
 }
