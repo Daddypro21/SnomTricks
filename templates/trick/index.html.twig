@@ -30,7 +30,7 @@
  {% if tricks|length > 0 %}
         <div class=" item-container">
         
-            {% for trick in tricks %}
+            {% for trick in tricks.data %}
                
                  <div class="item ">
                     <article class="bg-white rounded shadow"> 
@@ -46,7 +46,14 @@
                   
             {% endfor %}
             
+            
+            
            </div>
+
+        {% set path = 'app_home' %}
+        {% set pages = tricks.pages %}
+        {% set currentPage = tricks.page %}
+        {{include("trick/pagination.html.twig") }}
  {% else %}
  <h2 class='h1 text-center mt-5'> pas de trick #0 <a href="{{ path('app_tricks_create')}}">soyez le premier à créer un trick</a></h2>
 {% endif %} 

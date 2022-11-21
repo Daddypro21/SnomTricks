@@ -6,8 +6,8 @@ use App\Entity\User;
 use App\Entity\Trick;
 use App\Form\TrickType;
 use App\Entity\Comments;
-use App\Entity\Imageupdate;
 use App\Form\CommentsType;
+use App\Entity\Imageupdate;
 use App\Form\UpdateimageType;
 use App\Service\UploaderService;
 use App\Repository\TrickRepository;
@@ -19,6 +19,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 
@@ -28,22 +30,24 @@ class TrickController extends AbstractController
 
     
     #[Route('/', name: 'app_home')]
-    public function index( TrickRepository $trickRepository): Response
+    #[IsGranted('ROLE_USER')]
+    public function index( TrickRepository $trickRepository, Request $request): Response
     {
-        $tricks = $trickRepository->findBy([],['createdAt'=>'DESC']);
 
-        //$this->addFlash('success','Bienvenue '.$this->getUser()->getUserIdentifier());
-
+        //le numero de la page en url
+        $page = $request->query->getInt('page', 1);
+        $tricks = $trickRepository->trickPaginator($page,3);
         return $this->render('trick/index.html.twig', ['tricks'=>$tricks]);
     }
 
     #[Route('/tricks/create', name: 'app_tricks_create',methods :['GET','POST'])]
-    public function create(Request $request,EntityManagerInterface $em ,UserInterface $user ,UploaderService $uploaderService,TrickRepository $trickRepository,SluggerInterface $slugger):Response 
+    #[IsGranted('ROLE_USER')]
+    public function create(Request $request,EntityManagerInterface $em ,UploaderService $uploaderService,TrickRepository $trickRepository,SluggerInterface $slugger):Response 
     {
-        if (!$this->getUser()) {
-            $this->addFlash('info','Vous devrez vous connecter avant de créer un trick');
-            return $this->redirectToRoute('app_home');
-        }
+        // if (!$this->getUser()) {
+        //     $this->addFlash('info','Vous devrez vous connecter avant de créer un trick');
+        //     return $this->redirectToRoute('app_home');
+        // }
 
         $trick = new Trick;
         $form = $this->createForm(TrickType::class,$trick);
@@ -71,7 +75,7 @@ class TrickController extends AbstractController
              
             $trick->setCover($newFilename);
             $trick->setSlug($slugger->slug($trick->getTitle()));
-            $trick->setUser($user);
+            $trick->setUser($this->getUser());
             $trickRepository->add($trick, true); 
             $em->persist($trick);
             $em->flush();
@@ -89,13 +93,14 @@ class TrickController extends AbstractController
     }
 
     #[Route('/tricks/{id<[0-9]+>}/edit', name: 'app_tricks_edit',methods:["GET","PUT","POST"])]
-    public function edit(Trick $trick,Request $request,EntityManagerInterface $em,UserInterface $user,SluggerInterface $slugger,UploaderService $uploaderService,TrickRepository $trickRepository):Response 
+    #[IsGranted('ROLE_USER')]
+    public function edit(Trick $trick,Request $request,EntityManagerInterface $em,SluggerInterface $slugger,UploaderService $uploaderService,TrickRepository $trickRepository):Response 
     {
 
-        if (!$this->getUser()) {
-            $this->addFlash('info','Vous devrez vous connecter avant de modifier un trick');
-            return $this->redirectToRoute('app_home');
-        }
+        // if (!$this->getUser()) {
+        //     $this->addFlash('info','Vous devrez vous connecter avant de modifier un trick');
+        //     return $this->redirectToRoute('app_home');
+        // }
         $form = $this->createForm(TrickType::class,$trick);
     
         $form->handleRequest($request);
@@ -121,7 +126,7 @@ class TrickController extends AbstractController
              
             $trick->setCover($newFilename);
             $trick->setSlug($slugger->slug($trick->getTitle(),'_'));
-            $trick->setUser($user);
+            $trick->setUser($this->getUser());
             $trickRepository->add($trick, true); 
             $em->flush();
             $this->addFlash('success','trick modifié avec succes');
@@ -139,13 +144,10 @@ class TrickController extends AbstractController
 
 
     #[Route('/tricks/{id<[0-9]+>}/modif', name: 'app_tricks_modif',methods:["GET","PUT","POST"])]
-    public function editOne( $id,Request $request,EntityManagerInterface $em,UserInterface $user,SluggerInterface $slugger,UploaderService $uploaderService,TrickRepository $trickRepository):Response 
+    #[IsGranted('ROLE_USER')]
+    public function editOne( $id,Request $request,EntityManagerInterface $em,SluggerInterface $slugger,UploaderService $uploaderService,TrickRepository $trickRepository):Response 
     {
 
-        if (!$this->getUser()) {
-            $this->addFlash('info','Vous devrez vous connecter avant de modifier un trick');
-            return $this->redirectToRoute('app_home');
-        }
         $image = new Imageupdate();
         $form = $this->createForm(UpdateimageType::class,$image);
         $form->handleRequest($request);
@@ -185,12 +187,9 @@ class TrickController extends AbstractController
     }
 
     #[Route('/tricks/{id<[0-9]+>}/delete', name: 'app_tricks_delete',methods :["GET","POST"])]
+    #[IsGranted('ROLE_USER')]
     public function delete(Trick $trick,Request $request ,EntityManagerInterface $em):Response 
     {
-        if (!$this->getUser()) {
-            $this->addFlash('info','Vous devrez vous connecter avant de supprimer un trick');
-            return $this->redirectToRoute('app_home');
-        }
         if($this->isCsrfTokenValid('trick_delete_'.$trick->getId(),$request->request->get('csrf_token'))){
             $em->remove($trick);
             $em->flush();
@@ -200,12 +199,9 @@ class TrickController extends AbstractController
     }
 
     #[Route('/tricks/{image}-{id<[0-9]+>}/supp', name: 'app_tricks_supp',methods :["GET","POST"])]
+    #[IsGranted('ROLE_USER')]
     public function supprimer($image,Trick $trick, Request $request ,ImagesRepository $imageRepo,EntityManagerInterface $em): Response
     {
-        if (!$this->getUser()) {
-            $this->addFlash('info','Vous devrez vous connecter avant de supprimer un trick');
-            return $this->redirectToRoute('app_home');
-        }
         if($this->isCsrfTokenValid('trick_delete_'.$trick->getId(),$request->request->get('csrf_token'))){
         $query = $em->createQuery("DELETE FROM App\Entity\Images e WHERE e.id = " .$image );
         $query->execute();
