@@ -10,6 +10,53 @@
         </div>
     </div>
     </div>
+    {# .................... #}
+
+    <div class="container">
+
+{# ....... button pour créer un nouveau paper .......#}
+
+
+<div class="dropdown mb-3 mt-5">
+  <button
+    class="btn btn-secondary dropdown-toggle"
+    type="button"
+    id="dropdownMenuButton2"
+    data-mdb-toggle="dropdown"
+    aria-expanded="false"
+  >
+    Videos
+  </button>
+  <ul class="dropdown-menu dropdown-menu-light pe-5 ps-2 pt-5 pb-5" aria-labelledby="dropdownMenuButton2">
+
+{% if trick.videos|length > 0 %}
+    <div class="container"> 
+        <div class="row">
+            {% for video in trick.videos %}  
+                <div class="col-md-6  col-sm-12 mb-3">
+                    <div class="card text-center">
+                        <div class="card-body">
+                            <p class="card-text"><iframe width="200" height="200" src="https://www.youtube.com/embed/{{video.platformId}}" ></iframe></p>
+                        </div>
+
+                    </div>
+
+                </div>
+            {% endfor %}
+            
+        </div>
+       
+    </div>
+         {% endif %}
+  </ul>
+   
+</div>
+{# ............ #}
+
+
+</div>
+
+    {# ..................... #}
     <div class="container mt-4 mb-4">
         {% if trick.images|length > 0 %}
         <div class=" item-container">

@@ -163,8 +163,6 @@ class TrickController extends AbstractController
                 // ...
             }
 
-            // dd( $newFilename);
-
             $q = $em->createQueryBuilder()
                 ->update('App\Entity\Images', 'u')
                 ->set('u.filename', ':filename')
@@ -229,8 +227,6 @@ class TrickController extends AbstractController
         
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid()){
-
-            //Si vous n'êtes pas connecté vous ne pouvez pas commenter
             if (!$this->getUser()) {
             $this->addFlash('info','Vous devrez vous connecter pour pouvoir commenter');
             return $this->redirectToRoute('app_home');
