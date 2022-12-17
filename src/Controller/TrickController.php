@@ -98,8 +98,8 @@ class TrickController extends AbstractController
                 $trick->setCover($newFilename);
                 $em->flush();
 
-                $this->addFlash('success','Vous a modifié le trick');
-                return $this->redirectToRoute('app_user_show_one',['id'=>$trick]);
+                $this->addFlash('success','Vous avez modifié le trick');
+                return $this->redirectToRoute('app_user_show_one',['id'=>$trick->getId()]);
             }
         }
 
