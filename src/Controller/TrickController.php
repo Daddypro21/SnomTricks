@@ -116,10 +116,13 @@ class TrickController extends AbstractController
     }
 
 
-    #[Route('/user/trick/{id}/show_one', name:"app_user_show_one")]
+    #[Route('/user/trick/{id<[0-9]+>}/show_one', name:"app_user_show_one")]
     #[IsGranted('ROLE_USER')]
     public function show_one(Trick $trick ,TrickRepository $Trickrepo, ImageRepository $imageRepo, VideosRepository $videoRepo)
     {
+        if(!$trick){
+            return $this->redirectToRoute('app_home');
+        }
         $trick =  $Trickrepo->findOneBy(['id'=> $trick->getId()]);
         $images = $imageRepo->findBy(['trick'=> $trick]);
         $videos = $videoRepo->findBy(['trick'=> $trick]);
@@ -138,7 +141,7 @@ class TrickController extends AbstractController
            
             $em->remove($trick);
             $em->flush();
-            $this->addFlash('info','Ce trick a été supprimé avec succes');
+            $this->addFlash('success','Ce trick a été supprimé avec succes');
             
         }
         return $this->redirectToRoute('app_home');

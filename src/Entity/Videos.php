@@ -22,11 +22,11 @@ class Videos
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $platform = null;
 
-    #[ORM\Column(nullable: true)]
-    private ?int $platformId = null;
-
     #[ORM\ManyToOne(inversedBy: 'video')]
     private ?Trick $trick = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $platformId = null;
 
     public function getId(): ?int
     {
@@ -57,18 +57,6 @@ class Videos
         return $this;
     }
 
-    public function getPlatformId(): ?int
-    {
-        return $this->platformId;
-    }
-
-    public function setPlatformId(?int $platformId): self
-    {
-        $this->platformId = $platformId;
-
-        return $this;
-    }
-
     public function getTrick(): ?Trick
     {
         return $this->trick;
@@ -77,6 +65,18 @@ class Videos
     public function setTrick(?Trick $trick): self
     {
         $this->trick = $trick;
+
+        return $this;
+    }
+
+    public function getPlatformId(): ?string
+    {
+        return $this->platformId;
+    }
+
+    public function setPlatformId(?string $platformId): self
+    {
+        $this->platformId = $platformId;
 
         return $this;
     }

@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Trick;
 use App\Entity\Videos;
+use App\Form\VideosType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,12 +19,12 @@ class VideoController extends AbstractController
     public function addVideo(Trick $trick,Request $request,  EntityManagerInterface $em): Response
     {
         $videos = new Videos;
-        $form  = $this->createForm(VideoType::class,$videos);
+        $form  = $this->createForm(VideosType::class,$videos);
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid()){
             $video = $form->get('urlVideo')->getData();
             if($video){
-
+               
                 //https://www.youtube.com/watch?v=wnr2A4aKnPU
                 $regexYoutube = '/https:\/\/www\.youtube\.com\/watch\?v=([a-zA-Z0-9_\-]*)/m';
                 $resultYoutube = preg_match($regexYoutube, $video, $matches);
@@ -32,13 +33,13 @@ class VideoController extends AbstractController
                     $videos->setTrick($trick);
                     $videos->setPlatform(Videos::YOUTUBE);
                     $videos->setPlatformId($matches[1]);
-        
                     $em->persist($videos);
                     $em->flush();
                     $this->addFlash('success','Vous avez ajouté une video');
                     return $this->redirectToRoute('app_user_show_one',['id'=>$trick->getId()]);
                 }
-            
+                
+                $this->addFlash('success','L \'Url entrée n\'est pas valable,vous devrez entrer une url youtube  ');
             }
 
         }   
@@ -56,12 +57,13 @@ class VideoController extends AbstractController
     public function updateVideo(Trick $trick,Videos $videos,Request $request,  EntityManagerInterface $em): Response
     {
        
-        $form  = $this->createForm(VideoType::class,$videos);
+        $form  = $this->createForm(VideosType::class,$videos);
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid()){
             $video = $form->get('urlVideo')->getData();
             if($video){
 
+                
                 //https://www.youtube.com/watch?v=wnr2A4aKnPU
                 $regexYoutube = '/https:\/\/www\.youtube\.com\/watch\?v=([a-zA-Z0-9_\-]*)/m';
                 $resultYoutube = preg_match($regexYoutube, $video, $matches);
@@ -89,7 +91,7 @@ class VideoController extends AbstractController
 
 
 
-    #[Route('/user/trick/{id<[0-9]+>} - {token}/delete/video', name: 'app_user_trick_delete_video',methods :["GET"])]
+    #[Route('/user/trick/{id} - {token}/delete/video', name: 'app_user_trick_delete_video',methods :["GET"])]
     #[IsGranted('ROLE_USER')]
     public function delete(Videos $video, $token,EntityManagerInterface $em):Response 
     {

@@ -13,6 +13,7 @@
   <div class="card-body">
     <h5 class="card-title">{{trick.title}}</h5>
     <p class="card-text">{{trick.description}}</p>
+    <p class="card-text"><small class="text-muted">Créé par {{ trick.user.firstname}} {{ trick.user.lastname}} {{trick.createdAt | ago}}</small></p>
   </div>
 </div>
 
@@ -27,7 +28,7 @@
   </div>
 </div>
 <div class="container image-block " style="display:none;">
-<h4 class="text-center">Images</h4>
+<h6 class="text-center mt-3">Images</h6>
 {% if images is defined and images != null %}
 <div class="row">
 {% for image in images %}
@@ -40,7 +41,7 @@
 </div>
 
 <div class="container video-block" style="display:none;">
-<h4 class="text-center">Videos</h4>
+<h6 class="text-center  mt-3">Videos</h6>
 
 <div class="row">
 {% if videos is defined and videos != null %}
@@ -64,7 +65,7 @@
     {{form_start(form)}}
 
     {{form_widget(form)}}
-    <input type="submit" value="Ajouter un commentaire" class="btn btn-primary bg-gradien
+    <input type="submit" value="Ajouter un commentaire" class=" btn btn-primary bg-gradien
  btn-block"/>
     {{form_end(form)}}
 </div>

@@ -27,7 +27,7 @@ class MainController extends AbstractController
     }
 
 
-    #[Route('/trick/{id}-{slug}/show_one', name:"app_trick_show_one")]
+    #[Route('/trick/{id<[0-9]+>}-{slug}/show_one', name:"app_trick_show_one")]
     public function show_one(Trick $trick, $slug,TrickRepository $Trickrepo, ImageRepository $imageRepo, VideosRepository $videoRepo,
      Request $request,EntityManagerInterface $em, CommentsRepository $commentRepo)
     {

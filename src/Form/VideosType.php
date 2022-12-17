@@ -2,25 +2,25 @@
 
 namespace App\Form;
 
-use App\Entity\Video;
+use App\Entity\Videos;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Form\Extension\Core\Type\UrlType;
 
-class VideoType extends AbstractType
+class VideosType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-        ->add('urlVideo', UrlType::class)
-    ;
+            ->add('urlVideo',UrlType::class,['label'=>'Youtube Url'])
+        ;
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => Video::class,
+            'data_class' => Videos::class,
         ]);
     }
 }
