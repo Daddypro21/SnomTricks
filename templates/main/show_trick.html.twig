@@ -1,0 +1,115 @@
+{% extends 'base.html.twig' %}
+
+{% block title 'show-trick' %}
+
+{% block body %}
+
+<div class="container">
+<div class="row bg-light bg-gradient pt-4 pb-4 mt-4">
+<div class="col-md-6 mx-auto">
+
+<div class="card">
+  <img src="{{asset('uploads/images/' ~ trick.cover)}}" class="card-img-top" alt="Fissure in Sandstone"/>
+  <div class="card-body">
+    <h5 class="card-title">{{trick.title}}</h5>
+    <p class="card-text">{{trick.description}}</p>
+  </div>
+</div>
+
+</div>
+</div>
+</div>
+<div class="container">
+  <div class="row">
+
+  <div class="col-md-6 col-sm-12 mx-auto "><a href="#" class="btn btn-primary ms-3 mt-2" onclick="myFunctionImage()">Voir les images</a><a href="#" class="btn btn-primary ms-3 mt-2" onclick="myFunctionVideo()">Voir les videos</a></div>  
+ 
+  </div>
+</div>
+<div class="container image-block " style="display:none;">
+<h4 class="text-center">Images</h4>
+{% if images is defined and images != null %}
+<div class="row">
+{% for image in images %}
+<div class="col-md-3 col-sm-12"><img src="{{asset('uploads/image_trick/' ~ image.filename)}}" class="card-img-top" alt="image_trick"/></div>
+{% endfor %}
+</div>
+{% else %}
+<p class="text-muted text-center"> Ce trick n'a pas d'images</p>
+{% endif %}
+</div>
+
+<div class="container video-block" style="display:none;">
+<h4 class="text-center">Videos</h4>
+
+<div class="row">
+{% if videos is defined and videos != null %}
+<div class="row">
+{% for video in videos %}
+
+<div class="col-md-3 col-sm-12"><iframe src="https://www.youtube.com/embed/{{ video.platformId}}" class="card-img-top" alt="video_trick" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>
+{% endfor %}
+</div>
+{% else %}
+<p class="text-muted text-center"> Ce trick n'a pas de video</p>
+{% endif %}
+</div>
+</div>
+
+
+<div class="container">
+<div class="row bg-light bg-gradient pt-4 pb-4 mt-4">
+<div class="col-md-6 mx-auto">
+
+    {{form_start(form)}}
+
+    {{form_widget(form)}}
+    <input type="submit" value="Ajouter un commentaire" class="btn btn-primary bg-gradien
+ btn-block"/>
+    {{form_end(form)}}
+</div>
+</div>
+</div>
+
+<div class="container">
+<div class="row bg-white bg-gradient pt-4 pb-4 mt-4">
+<div class="col-md-6 mx-auto" style="border:1px solid gray ; ">
+
+{% if commentaires is defined and commentaires != null %}
+
+{% for commentaire in commentaires %}
+<h5 class=" text-muted ">{{commentaire.user.firstname}}</h5>
+<p>{{commentaire.content}} </p>
+<p style="font-size:12px ; " class="text-muted"> {{ commentaire.createdAt | ago }}</p>
+{% endfor %}
+{% else %}
+<p class="text-center">Ce trick n'a pas encore de commentaires </p>
+{% endif %}
+</div>
+</div>
+
+</div>
+
+<script>
+function myFunctionImage(){
+
+  let x = document.querySelector(".image-block");
+  if(x.style.display === "none"){
+    x.style.display ="block";
+  }else{
+    x.style.display ="none";
+  }
+}
+
+function myFunctionVideo(){
+
+  let x = document.querySelector(".video-block");
+  if(x.style.display === "none"){
+    x.style.display ="block";
+  }else{
+    x.style.display ="none";
+  }
+}
+
+</script>
+{% endblock %}

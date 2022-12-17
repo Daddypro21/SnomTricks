@@ -19,32 +19,9 @@ class TrickType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('title',TextType::class,['label'=>'Titre','attr' => ['class' => 'form-text']])
-            ->add('description',TextareaType::class,['label'=>'Description','attr' => ['class' => 'commentform']])
-            ->add('cover', FileType::class, [
-                'label' => 'image de couverture (JPG,PNG FILE)',
-                'mapped' => false,
-                'required' => true,
-                
-                ])
-            ->add('images', CollectionType::class, [
-                'entry_type' => ImageType::class,
-                'allow_add' => true,
-                'allow_delete' => true,
-                'attr' => [
-                    'class' => 'collection'
-                ],
-                'by_reference' => false
-            ])
-            ->add('videos', CollectionType::class, [
-                'entry_type' => VideoType::class,
-                'allow_add' => true,
-                'allow_delete' => true,
-                'attr' => [
-                    'class' => 'collection'
-                ],
-                'by_reference' => false
-            ])
+            ->add('title')
+            ->add('description')
+            ->add('cover', FileType::class,['data_class'=> null] )
         ;
     }
 

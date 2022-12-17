@@ -1,14 +1,16 @@
-{% extends 'base.html.twig'%}
-{% block title %}editer trick# {{ trick.id}}{% endblock %}
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier le trick{% endblock %}
 
 {% block body %}
- 
 
-<div class="row">
+<div class="container">
+<div class="row bg-light bg-gradient pt-4 pb-4 mt-4">
    <div class="col-md-6 mx-auto">
-   <h1>Editer trick# {{trick.id}}</h1>
 
-   {{include('trick/form.html.twig',{'submitButtonText':'Editer le trick'})}}
+    <h1 class="text-center">Modifier le trick </h1>
+ {{include('partials/form.html.twig',{'submitButtonText':'Modifier le trick'}) }}
 </div>
-
+</div>
+</div>
 {% endblock %}

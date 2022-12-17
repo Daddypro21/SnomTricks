@@ -7,7 +7,8 @@
     border-radius:0;
 }
 .alert-success{
-    background:green;
+    background:rgb(7, 240, 65);
+  
 }
 .alert-info{
     background:blue;

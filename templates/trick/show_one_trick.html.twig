@@ -1,0 +1,82 @@
+{% extends 'base.html.twig' %}
+
+{% block title ' Dashboard show-one' %}
+{% block body %}
+
+{% if trick is defined and trick != null  %}
+<div class="container">
+
+<div class="row bg-light bg-gradient pt-4 pb-4 mt-4">
+   <div class="col-md-6 mx-auto">
+        <div class="titre"><h1 class="text-center">{{trick.title}}</h1><div>
+        <div class="cover">
+        <img src="{{ asset('uploads/images/' ~ trick.cover)}}" alt="image" width="200" height="200">
+        </div>
+
+        <div class="description">
+        <p>{{trick.description}}</p>
+        </div
+        <div class="option">
+        <a href="{{path('app_user_trick_edit',{id:trick.id})}}" class="btn btn-primary mt-2">Editer le trick</a>
+        <a href="{{path('app_user_trick_delete',{id:trick.id, token: csrf_token('delete' ~ trick.id)})}}" class="btn btn-primary mt-2">Supprimer le trick</a>
+        <a href="{{path('app_user_add_image',{id:trick.id})}}" class="btn btn-primary mt-2">Ajouter une image</a>
+        <a href="{{path('app_user_add_video',{id:trick.id})}}" class="btn btn-primary mt-2">Ajouter une video</a>
+        </div>
+    </div>
+
+
+</div>
+</div>
+
+
+{% endif %}
+
+
+
+<div class="container">
+<h4 class="text-center text-muted">Images</h4>
+{% if images is defined and images != null %}
+<div class="row">
+{% for image in images %}
+<div class="col-md-3 col-sm-12">
+<img src="{{asset('uploads/image_trick/' ~ image.filename)}}" class="card-img-top" alt="image_trick"/>
+<div class="option mt-2">
+<a href="{{path('app_user_edit_image',{images:image.id,trick:image.trick.id})}}" class="btn btn-primary mt-2">modifier</a>
+<a href="{{path('app_user_trick_delete_image',{id:image.id, token:csrf_token('delete' ~ image.id)})}}" class="btn btn-primary mt-2">supprimer</a>
+</div>
+</div>
+{% endfor %}
+</div>
+{% else %}
+<p class="text-muted text-center"> Ce trick n'a pas d'images</p>
+{% endif %}
+</div>
+
+
+
+
+<div class="container">
+<h4 class="text-center text-muted">Videos</h4>
+
+<div class="row">
+{% if videos is defined and videos != null %}
+<div class="row">
+{% for video in videos %}
+
+<div class="col-md-3 col-sm-12">
+<iframe src="https://www.youtube.com/embed/{{ video.platformId}}" class="card-img-top" alt="video_trick" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<div class="option mt-2">
+<a href="{{path('app_user_update_video',{videos:video.id,trick:video.trick.id})}}" class="btn btn-primary mt-2">modifier</a>
+<a href="{{path('app_user_trick_delete_video',{id:video.id, token:csrf_token('delete' ~ video.id)})}}" class="btn btn-primary mt-2">supprimer</a>
+</div>
+</div>
+{% endfor %}
+</div>
+{% else %}
+<p class="text-muted text-center"> Ce trick n'a pas de video</p>
+{% endif %}
+</div>
+</div>
+
+{% endblock %}
+

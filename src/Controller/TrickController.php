@@ -2,24 +2,17 @@
 
 namespace App\Controller;
 
-use App\Entity\User;
+
 use App\Entity\Trick;
 use App\Form\TrickType;
-use App\Entity\Comments;
-use App\Form\CommentsType;
-use App\Entity\Imageupdate;
-use App\Form\UpdateimageType;
-use App\Service\UploaderService;
+use App\Repository\ImageRepository;
 use App\Repository\TrickRepository;
-use App\Repository\ImagesRepository;
-use App\Repository\CommentsRepository;
+use App\Repository\VideosRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\String\Slugger\SluggerInterface;
-use Symfony\Component\Security\Core\User\UserInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
@@ -28,30 +21,13 @@ use Symfony\Component\HttpFoundation\File\Exception\FileException;
 class TrickController extends AbstractController
 {
 
-    
-    #[Route('/', name: 'app_home')]
+    #[Route('/user/trick/create', name: 'app_user_trick_create')]
     #[IsGranted('ROLE_USER')]
-    public function index( TrickRepository $trickRepository, Request $request): Response
+    public function create( Request $request, EntityManagerInterface $em,SluggerInterface $slugger): Response
     {
-
-        //le numero de la page en url
-        $page = $request->query->getInt('page', 1);
-        $tricks = $trickRepository->trickPaginator($page,3);
-        return $this->render('trick/index.html.twig', ['tricks'=>$tricks]);
-    }
-
-    #[Route('/tricks/create', name: 'app_tricks_create',methods :['GET','POST'])]
-    #[IsGranted('ROLE_USER')]
-    public function create(Request $request,EntityManagerInterface $em ,UploaderService $uploaderService,TrickRepository $trickRepository,SluggerInterface $slugger):Response 
-    {
-        // if (!$this->getUser()) {
-        //     $this->addFlash('info','Vous devrez vous connecter avant de créer un trick');
-        //     return $this->redirectToRoute('app_home');
-        // }
 
         $trick = new Trick;
-        $form = $this->createForm(TrickType::class,$trick);
-           
+        $form = $this->createForm( TrickType::class, $trick);
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid()){
             $cover = $form->get('cover')->getData();
@@ -72,184 +48,100 @@ class TrickController extends AbstractController
                     // ...
                 }
 
-             
-            $trick->setCover($newFilename);
-            $trick->setSlug($slugger->slug($trick->getTitle()));
-            $trick->setUser($this->getUser());
-            $trickRepository->add($trick, true); 
-            $em->persist($trick);
-            $em->flush();
-            $this->addFlash('success','trick créer avec succes');
-            return $this->redirectToRoute('app_home');   
+                $trick->setUser($this->getUser());
+                $trick->setSlug($trick->getTitle());
+                $trick->setCover($newFilename);
+                $em->persist($trick);
+                $em->flush();
 
-        }  
-         
-        }
-            return $this->render('trick/create.html.twig',
-            [
-                'trick'=> $trick,
-                'formulaire'=>$form->createView()
-            ]);
-    }
-
-    #[Route('/tricks/{id<[0-9]+>}/edit', name: 'app_tricks_edit',methods:["GET","PUT","POST"])]
-    #[IsGranted('ROLE_USER')]
-    public function edit(Trick $trick,Request $request,EntityManagerInterface $em,SluggerInterface $slugger,UploaderService $uploaderService,TrickRepository $trickRepository):Response 
-    {
-
-        // if (!$this->getUser()) {
-        //     $this->addFlash('info','Vous devrez vous connecter avant de modifier un trick');
-        //     return $this->redirectToRoute('app_home');
-        // }
-        $form = $this->createForm(TrickType::class,$trick);
-    
-        $form->handleRequest($request);
-        if($form->isSubmitted() && $form->isValid()){
-            $cover = $form->get('cover')->getData();
-
-            if ($cover) {
-                $originalFilename = pathinfo($cover->getClientOriginalName(), PATHINFO_FILENAME);
-                
-                $safeFilename = $slugger->slug($originalFilename);
-                $newFilename = $safeFilename.'-'.uniqid().'.'.$cover->guessExtension();
-
-               
-                try {
-                    $cover->move(
-                        $this->getParameter('images_directory'),
-                        $newFilename
-                    );
-                } catch (FileException $e) {
-                    // ...
-                }
-
-             
-            $trick->setCover($newFilename);
-            $trick->setSlug($slugger->slug($trick->getTitle(),'_'));
-            $trick->setUser($this->getUser());
-            $trickRepository->add($trick, true); 
-            $em->flush();
-            $this->addFlash('success','trick modifié avec succes');
-            return $this->redirectToRoute('app_home');   
-
-        }  
-         
-        }
-            return $this->render('trick/edit.html.twig',
-            [
-                'trick'=> $trick,
-                'formulaire'=>$form->createView()
-            ]);
-    }
-
-
-    #[Route('/tricks/{id<[0-9]+>}/modif', name: 'app_tricks_modif',methods:["GET","PUT","POST"])]
-    #[IsGranted('ROLE_USER')]
-    public function editOne( $id,Request $request,EntityManagerInterface $em,SluggerInterface $slugger,UploaderService $uploaderService,TrickRepository $trickRepository):Response 
-    {
-
-        $image = new Imageupdate();
-        $form = $this->createForm(UpdateimageType::class,$image);
-        $form->handleRequest($request);
-        if($form->isSubmitted() && $form->isValid()){
-            $image = $form->get('imageupdate')->getData();
-            $originalFilename = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
-            $safeFilename = $slugger->slug($originalFilename);
-            $newFilename = $safeFilename.'-'.uniqid().'.'.$image->guessExtension();
-            try {
-                $image->move(
-                    $this->getParameter('image_update'),
-                    $newFilename
-                );
-            } catch (FileException $e) {
-                // ...
+                $this->addFlash('success','Vous avez créé un nouveau trick,vous pouvez ajouter des images et videos');
             }
 
-            $q = $em->createQueryBuilder()
-                ->update('App\Entity\Images', 'u')
-                ->set('u.filename', ':filename')
-                ->where('u.id = :id')
-                ->setParameter('id', $id)
-                ->setParameter('filename', $newFilename)
-                ->getQuery();
-            $p = $q->execute();
-
-            $this->addFlash('success','image modifié avec succes');
-            return $this->redirectToRoute('app_home');
+            
         }
-        
-        
-        return $this->render('trick/edit_one.html.twig',
-            [
-                'form'=> $form->createView()
-            ]);
+
+      
+        return $this->render('trick/create.html.twig', [
+            'form'=> $form->createView(),
+        ]);
+    }
+
+    #[Route('/user/trick/edit/{id<[0-9]+>}', name: 'app_user_trick_edit')]
+    #[IsGranted('ROLE_USER')]
+    public function edit(Trick $trick,Request $request, EntityManagerInterface $em,SluggerInterface $slugger)
+    {
+        $form = $this->createForm(TrickType::class,$trick);
+        $form->handleRequest($request);
+        if($form->isSubmitted() && $form->isValid()){
+           
+            $cover = $form->get('cover')->getData();
+
+            if ($cover) {
+                $originalFilename = pathinfo($cover->getClientOriginalName(), PATHINFO_FILENAME);
+                
+                $safeFilename = $slugger->slug($originalFilename);
+                $newFilename = $safeFilename.'-'.uniqid().'.'.$cover->guessExtension();
+
+               
+                try {
+                    $cover->move(
+                        $this->getParameter('images_directory'),
+                        $newFilename
+                    );
+                } catch (FileException $e) {
+                    // ...
+                }
+
+                $trick->setUser($this->getUser());
+                $trick->setSlug($trick->getTitle());
+                $trick->setCover($newFilename);
+                $em->flush();
+
+                $this->addFlash('success','Vous a modifié le trick');
+            }
+        }
+
+        return $this->render('trick/edit.html.twig', [
+            'form'=> $form->createView(),
+        ]);
 
     }
 
-    #[Route('/tricks/{id<[0-9]+>}/delete', name: 'app_tricks_delete',methods :["GET","POST"])]
+    #[Route('/user/trick/show', name:"app_user_trick_show")]
     #[IsGranted('ROLE_USER')]
-    public function delete(Trick $trick,Request $request ,EntityManagerInterface $em):Response 
+    public function shows(TrickRepository $Trickrepo)
     {
-        if($this->isCsrfTokenValid('trick_delete_'.$trick->getId(),$request->request->get('csrf_token'))){
+        $trick =  $Trickrepo->findBy(['user'=> $this->getUser()],['createdAt'=>'DESC']);
+        return $this->render('trick/show_tricks.html.twig',['tricks'=> $trick]);
+    }
+
+
+    #[Route('/user/trick/{id}/show_one', name:"app_user_show_one")]
+    #[IsGranted('ROLE_USER')]
+    public function show_one(Trick $trick ,TrickRepository $Trickrepo, ImageRepository $imageRepo, VideosRepository $videoRepo)
+    {
+        $trick =  $Trickrepo->findOneBy(['id'=> $trick->getId()]);
+        $images = $imageRepo->findBy(['trick'=> $trick]);
+        $videos = $videoRepo->findBy(['trick'=> $trick]);
+
+        return $this->render('trick/show_one_trick.html.twig',
+        ['trick'=> $trick, 'images'=>$images, 'videos'=> $videos]);
+
+
+    }
+    #[Route('/user/trick/{id<[0-9]+>} - {token}/delete', name: 'app_user_trick_delete',methods :["GET"])]
+    #[IsGranted('ROLE_USER')]
+    public function delete(Trick $trick, $token,EntityManagerInterface $em):Response 
+    {
+       
+        if($this->isCsrfTokenValid('delete'.$trick->getId(),$token)){
+           
             $em->remove($trick);
             $em->flush();
             $this->addFlash('info','Ce trick a été supprimé avec succes');
-        }
-        return $this->redirectToRoute('app_home');
-    }
-
-    #[Route('/tricks/{image}-{id<[0-9]+>}/supp', name: 'app_tricks_supp',methods :["GET","POST"])]
-    #[IsGranted('ROLE_USER')]
-    public function supprimer($image,Trick $trick, Request $request ,ImagesRepository $imageRepo,EntityManagerInterface $em): Response
-    {
-        if($this->isCsrfTokenValid('trick_delete_'.$trick->getId(),$request->request->get('csrf_token'))){
-        $query = $em->createQuery("DELETE FROM App\Entity\Images e WHERE e.id = " .$image );
-        $query->execute();
-        $this->addFlash('info','image supprimé avec succes');
-        return $this->redirectToRoute('app_home');
-        }
-    }
-
-
-    #[Route('/tricks/{slug}-{id<[0-9]+>}', name: 'app_tricks_show',methods :['GET','POST'])]
-    public function show($slug,Trick $trick,Request $request,EntityManagerInterface $em,CommentsRepository $commentsRepo  ): Response 
-    {
-        
-        if(! $trick){
-            throw $this->createNotFoundException("Ce trick n'existe pas ");
-        }
-        $comments = new Comments;
-        $form = $this->createForm(CommentsType::class,$comments);
-        
-        $form->handleRequest($request);
-        if($form->isSubmitted() && $form->isValid()){
-            if (!$this->getUser()) {
-            $this->addFlash('info','Vous devrez vous connecter pour pouvoir commenter');
-            return $this->redirectToRoute('app_home');
-            }
-
-            $comments->setUser($this->getUser());
-            $comments->setTrick($trick);
-            $em->persist($comments);
-            $em->flush();
             
-            return $this->redirectToRoute('app_tricks_show',['id'=>$trick->getId()]);
         }
-       $emailUser ='defaultEmail';
-        if($this->getUser()){
-            $emailUser = $this->getUser()->getUserIdentifier();
-        }
-        
-        $emailUser ? $emailUser : 'defaultEmail';
-        $allComments = $commentsRepo->findBy( ['trick'=> $trick],['createdAt'=>'DESC']);
-
-        return $this->render("trick/show.html.twig",[
-
-            'allComment'=>$allComments,
-            'trick'=>$trick,
-            'emailUser'=> $emailUser,
-            'formulaire'=>$form->createView()
-        ]);  
-        
+        return $this->redirectToRoute('app_home');
+      
     }
 }

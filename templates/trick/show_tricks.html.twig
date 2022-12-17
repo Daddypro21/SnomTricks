@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+{% block title 'Dashboard show-tricks' %}
+{% block body %}
+
+{% if tricks is defined and tricks != null  %}
+
+<div class="container">
+
+<div class="row">
+{% for trick in tricks %}
+    <div class="col mt-3 border">
+        <div class="titre"><h2 class="">{{trick.title}}</h2><div>
+        <div class="cover">
+        <img src="{{ asset('uploads/images/' ~ trick.cover)}}" alt="image" width="100"> 
+        </div>
+
+        <div class="description">
+        <p>{{trick.description}}</p>
+        </div
+        <div class="option">
+        <a href="{{path('app_user_trick_edit',{id:trick.id})}}" class="btn btn-primary mt-2">Editer le trick</a>
+        <a href="{{path('app_user_trick_delete',{id:trick.id, token: csrf_token('delete' ~ trick.id)})}}" class="btn btn-primary mt-2">Supprimer le trick</a>
+        <a href="{{path('app_user_add_image',{id:trick.id})}}" class="btn btn-primary mt-2">Ajouter une image</a>
+        <a href="{{path('app_user_add_video',{id:trick.id})}}" class="btn btn-primary mt-2">Ajouter une video</a>
+        <a href="{{path('app_user_show_one',{id:trick.id})}}" class="btn btn-primary mt-2">voir</a>
+        </div>
+    </div>
+
+{% endfor %}
+</div>
+</div>
+
+{% else %}
+<h4 class="text- muted text-center mt-5"> Vous n'avez pas encore créé de trick</h4>
+{% endif %}
+{% endblock %}
