@@ -55,6 +55,7 @@ class TrickController extends AbstractController
                 $em->flush();
 
                 $this->addFlash('success','Vous avez créé un nouveau trick,vous pouvez ajouter des images et videos');
+                return $this->redirectToRoute('app_user_trick_show');
             }
 
             
@@ -98,6 +99,7 @@ class TrickController extends AbstractController
                 $em->flush();
 
                 $this->addFlash('success','Vous a modifié le trick');
+                return $this->redirectToRoute('app_user_show_one',['id'=>$trick]);
             }
         }
 
@@ -144,7 +146,7 @@ class TrickController extends AbstractController
             $this->addFlash('success','Ce trick a été supprimé avec succes');
             
         }
-        return $this->redirectToRoute('app_home');
+        return $this->redirectToRoute('app_user_trick_show');
       
     }
 }
