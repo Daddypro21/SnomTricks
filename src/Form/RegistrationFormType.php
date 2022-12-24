@@ -10,6 +10,7 @@ use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 
@@ -20,7 +21,7 @@ class RegistrationFormType extends AbstractType
         $builder
             ->add('firstName',TextType::class,['label'=>'Prenom','attr' => ['class' => 'bg-light form-text']])
             ->add('lastName',TextType::class,['label'=>'Nom','attr' => ['class' => 'bg-light form-text']])
-            ->add('email',TextType::class,['label'=>'Email','attr' => ['class' => 'bg-light form-text']])
+            ->add('email',EmailType::class,['label'=>'Email','attr' => ['class' => 'bg-light form-text']])
             ->add('agreeTerms', CheckboxType::class, [
                 'label'=> 'j\'accepte les conditions d\'utilisation',
                 'mapped' => false,

@@ -12,6 +12,7 @@
 }
 .alert-info{
     background:blue;
+     /* background:rgb(219, 228, 154); */
 }
 .alert-error{
     background:red;

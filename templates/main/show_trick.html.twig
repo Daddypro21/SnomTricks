@@ -57,7 +57,7 @@
 </div>
 </div>
 
-
+{% if app.user %}
 <div class="container">
 <div class="row bg-light bg-gradient pt-4 pb-4 mt-4">
 <div class="col-md-6 mx-auto">
@@ -71,7 +71,9 @@
 </div>
 </div>
 </div>
-
+{% else %}
+<h3 class="text-center mt-3 mb-3 ">Creez un compte pour pouvoir commenter</h3>
+{% endif %}
 <div class="container">
 <div class="row bg-white bg-gradient pt-4 pb-4 mt-4">
 <div class="col-md-6 mx-auto" style="border:1px solid gray ; ">

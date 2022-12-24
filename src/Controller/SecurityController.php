@@ -30,4 +30,11 @@ class SecurityController extends AbstractController
     {
         throw new \LogicException('This method can be blank - it will be intercepted by the logout key on your firewall.');
     }
+    public function emailNoValide($email)
+    {
+        $this->addFlash('info','le format de votre email n\'est pas valide');
+        return $this->redirectToRoute('app_login');
+
+    }
+
 }
