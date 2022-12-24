@@ -21,9 +21,11 @@ COMMENT AVOIR CE PROJET SUR SA MACHINE ET LE FAIRE FONCTIONNER  ?
 *faites la mis à jour de la base de donnée,allez dans le fichier .env et faites la configuration : DATABASE_URL=mysql://db_user:db_password@127.0.0.1:3306/db_name
 par exemple  : DATABASE_URL=mysql://root:@127.0.0.1:3306/snowtricks
 
-*pour créer la base de donnée faites la commande : php bin/console doctrine:database:create 
+*pour créer la base de donnée tapez la commande : php bin/console doctrine:database:create 
 
-*faites les migrations avec la commande : php bin/console make:migration
+*faites les migrations avec la commande  : php bin/console make:migration
+
+*Tapez la commande "php bin/console doctrine:migrations:migrate" pour migrer les migrations dans la base de donnée 
 
 NB: Vous devrez avoir mysql ou un autre driver installé sur votre machine, je vous 
 suggère d'installer  xampp ou wamp .
