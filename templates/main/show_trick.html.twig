@@ -12,7 +12,7 @@
   <img src="{{asset('uploads/images/' ~ trick.cover)}}" class="card-img-top" alt="Fissure in Sandstone"/>
   <div class="card-body">
     <h5 class="card-title">{{trick.title}}</h5>
-    <p class="card-text">{{trick.description}}</p>
+    <p class="card-text">{{trick.description | raw}}</p>
     <p class="card-text"><small class="text-muted">Créé par {{ trick.user.firstname}} {{ trick.user.lastname}} {{trick.createdAt | ago}}</small></p>
   </div>
 </div>
@@ -65,8 +65,7 @@
     {{form_start(form)}}
 
     {{form_widget(form)}}
-    <input type="submit" value="Ajouter un commentaire" class=" btn btn-primary bg-gradien
- btn-block"/>
+    <input type="submit" value="Ajouter un commentaire" class=" btn btn-primary bg-gradien"/>
     {{form_end(form)}}
 </div>
 </div>
@@ -76,14 +75,18 @@
 {% endif %}
 <div class="container">
 <div class="row bg-white bg-gradient pt-4 pb-4 mt-4">
-<div class="col-md-6 mx-auto" style="border:1px solid gray ; ">
+<div class="col-md-6 mx-auto">
 
 {% if commentaires is defined and commentaires != null %}
 
 {% for commentaire in commentaires %}
-<h5 class=" text-muted ">{{commentaire.user.firstname}}</h5>
+
+
+<div class="" style=" margin-top:5px; ">
+<h5 class=" text-muted "> <a href="{{ path('app_account_show', {id:commentaire.user.id} )}}" > <span class="badge badge-primary">{{commentaire.user.firstname}}</span></a></h5>
 <p>{{commentaire.content}} </p>
 <p style="font-size:12px ; " class="text-muted"> {{ commentaire.createdAt | ago }}</p>
+</div>
 {% endfor %}
 {% else %}
 <p class="text-center">Ce trick n'a pas encore de commentaires </p>

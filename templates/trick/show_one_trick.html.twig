@@ -7,7 +7,7 @@
 <div class="container">
 
 <div class="row bg-light bg-gradient pt-4 pb-4 mt-4">
-   <div class="col-md-6 mx-auto">
+   <div class="col-md-6 mx-auto col-sm-12">
         <div class="titre"><h1 class="text-center">{{trick.title}}</h1><div>
         <div class="cover">
         <img src="{{ asset('uploads/images/' ~ trick.cover)}}" alt="image" width="200" height="200">
@@ -17,10 +17,10 @@
         <p>{{trick.description}}</p>
         </div
         <div class="option">
-        <a href="{{path('app_user_trick_edit',{id:trick.id})}}" class="btn btn-primary mt-2">Editer le trick</a>
-        <a href="{{path('app_user_trick_delete',{id:trick.id, token: csrf_token('delete' ~ trick.id)})}}" class="btn btn-primary mt-2">Supprimer le trick</a>
-        <a href="{{path('app_user_add_image',{id:trick.id})}}" class="btn btn-primary mt-2">Ajouter une image</a>
-        <a href="{{path('app_user_add_video',{id:trick.id})}}" class="btn btn-primary mt-2">Ajouter une video</a>
+        <a href="{{path('app_user_trick_edit',{id:trick.id})}}" class="btn btn-primary btn-sm mt-2">Editer le trick</a>
+        <a href="{{path('app_user_trick_delete',{id:trick.id, token: csrf_token('delete' ~ trick.id)})}}" class="btn btn-primary btn-sm mt-2">Supprimer le trick</a>
+        <a href="{{path('app_user_add_image',{id:trick.id})}}" class="btn btn-primary btn-sm mt-2">Ajouter une image</a>
+        <a href="{{path('app_user_add_video',{id:trick.id})}}" class="btn btn-primary btn-sm mt-2">Ajouter une video</a>
         </div>
     </div>
 
@@ -41,8 +41,8 @@
 <div class="col-md-3 col-sm-12">
 <img src="{{asset('uploads/image_trick/' ~ image.filename)}}" class="card-img-top" alt="image_trick"/>
 <div class="option mt-2">
-<a href="{{path('app_user_edit_image',{images:image.id,trick:image.trick.id})}}" class="btn btn-primary mt-2">modifier</a>
-<a href="{{path('app_user_trick_delete_image',{id:image.id, token:csrf_token('delete' ~ image.id)})}}" class="btn btn-primary mt-2">supprimer</a>
+<a href="{{path('app_user_edit_image',{images:image.id,trick:image.trick.id})}}" class="btn btn-primary btn-sm mt-2">modifier</a>
+<a href="{{path('app_user_trick_delete_image',{id:image.id, token:csrf_token('delete' ~ image.id)})}}" class="btn btn-primary btn-sm mt-2">supprimer</a>
 </div>
 </div>
 {% endfor %}
@@ -66,8 +66,8 @@
 <div class="col-md-3 col-sm-12">
 <iframe src="https://www.youtube.com/embed/{{ video.platformId}}" class="card-img-top" alt="video_trick" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 <div class="option mt-2">
-<a href="{{path('app_user_update_video',{videos:video.id,trick:video.trick.id})}}" class="btn btn-primary mt-2">modifier</a>
-<a href="{{path('app_user_trick_delete_video',{id:video.id, token:csrf_token('delete' ~ video.id)})}}" class="btn btn-primary mt-2">supprimer</a>
+<a href="{{path('app_user_update_video',{videos:video.id,trick:video.trick.id})}}" class="btn btn-primary btn-sm mt-2">modifier</a>
+<a href="{{path('app_user_trick_delete_video',{id:video.id, token:csrf_token('delete' ~ video.id)})}}" class="btn btn-primary btn-sm mt-2">supprimer</a>
 </div>
 </div>
 {% endfor %}

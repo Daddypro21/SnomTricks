@@ -67,6 +67,7 @@ class TrickController extends AbstractController
         ]);
     }
 
+    
     #[Route('/user/trick/edit/{id<[0-9]+>}', name: 'app_user_trick_edit')]
     #[IsGranted('ROLE_USER')]
     public function edit(Trick $trick,Request $request, EntityManagerInterface $em,SluggerInterface $slugger)

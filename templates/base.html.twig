@@ -8,6 +8,7 @@
         <link rel="stylesheet" href="{{ asset('css/app.css')}}">
         <link rel="stylesheet" href="{{asset('cssMDB/mdb.min.css')}}">
         <link rel="stylesheet"  href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
       
      
         <script src="https://kit.fontawesome.com/51f34b2637.js" crossorigin="anonymous"></script>
@@ -21,8 +22,9 @@
         {% endblock %}
     </head>
     <body>
-        {{include('partials/flashmessage.html.twig')}}
+       
         {{include('partials/navbar.html.twig')}}
+        {{include('partials/flashmessage.html.twig')}}
         {% block header %}{% endblock %}
         
         <main role="main" class="main ">

@@ -13,17 +13,21 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController; 
+
+
 
 class MainController extends AbstractController
 {
+
     #[Route('/', name: 'app_home')]
-    public function index(TrickRepository $Trickrepo,Request $request)
+    public function index(TrickRepository $Trickrepo,Request $request )
     {
          $page = $request->query->getInt('page', 1);
-         $trick = $Trickrepo->trickPaginator($page,4);
+         $tricks = $Trickrepo->trickPaginator($page,4);  
+        
         // // $trick =  $Trickrepo->findAll();
-        return $this->render('main/index.html.twig',['tricks'=> $trick]);
+        return $this->render('main/index.html.twig',['tricks'=> $tricks]);
     }
 
 

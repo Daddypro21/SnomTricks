@@ -118,14 +118,15 @@ article{
         display:flex;
         flex-direction: column;
         flex-wrap:nowrap;
+        width: 100%;
        
         
       }
 
       .item{
         max-width: 100%;
-        margin-left: 2px;
-        margin-top :4px;
+        margin-left: 0px;
+        margin-top :2px;
         padding: 2px 2px;
      }
      .item-container .item  article a{
@@ -141,6 +142,8 @@ article{
         max-height: 500px;
      
      }
+
+     
      .show-paragraphe{
         font-size:1.2em;
      }
@@ -206,10 +209,15 @@ article{
       }
   }
 
+  /* ........................... */
   @media screen and (max-width: 576px){
     .label-form{
       font-size:12px;
       
+    }
+    .form-form{
+      margin:auto;
+      width:85%;
     }
     .label-label{
       margin-top:12px;
@@ -222,6 +230,16 @@ article{
    .item-container .item  article p{
       font-size:1.0em;
    }
+   article{
+    padding:0;
+  }
+
+   .item{
+    max-width: 100%;
+    margin-left: 0px;
+    margin-top :0px;
+    padding: 0px;
+ }
    footer p {
     font-size:1.0em;
   }
@@ -252,4 +270,13 @@ article{
 label{
     font-size:1.0em;
 }
-  }
+
+article{
+  margin:0px;
+  width: 100%;
+
+}
+
+}
+
+ 

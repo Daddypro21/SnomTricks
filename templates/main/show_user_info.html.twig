@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Profil-{{user_info.fullname}}{% endblock %}
+
+{% block body %}
+    <div class="row profil">
+              
+        <div class="col-md-6  mx-auto text-center">
+            <h1 class="my-5">Profil</h1>
+            <img src="{{asset('images/about.jpg')}}" alt=" avatar de " class=" shadow rounded-circle ">
+
+            <h2 class="mt-5">{{user_info.fullname}}</h2>
+            <p ><small> compte créé le {{user_info.createdAt|date('d/m/Y')}}</small></p>
+           
+            {#  #}
+        </div>
+    </div>
+
+
+
+    
+{% endblock %}

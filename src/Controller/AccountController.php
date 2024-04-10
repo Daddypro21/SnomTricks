@@ -6,10 +6,14 @@ use App\Entity\User;
 use App\Form\UserFormType;
 use Doctrine\ORM\EntityManager;
 use App\Form\ChangePasswordFormType;
+use App\Repository\ImageRepository;
+use App\Repository\TrickRepository;
+use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
@@ -48,13 +52,12 @@ class AccountController extends AbstractController
     public function changePassword( Request $request,EntityManagerInterface $em,UserPasswordHasherInterface $userPasswordHasher): Response 
     {
         
-        $user = new User;
+        $user = $this->getUser();
         $form = $this->createForm(ChangePasswordFormType::class);
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid()){
             $user->setPassword($userPasswordHasher->hashPassword( $user,$form->get('plainPassword')->getData()));
-            
             $em->flush();
 
             $this->addFlash('success',' mot de passe mis à jour avec succès');
@@ -65,5 +68,17 @@ class AccountController extends AbstractController
             'formulaire' => $form->createView()
         ]);
 
+    }
+
+    #[Route('/account/show-account/{id<[0-9]+>}', name: 'app_account_show', methods:['POST','GET'])]
+    public function showAccount(User $user,Request $request, 
+    SluggerInterface $slugger, UserRepository $userRepo, 
+    TrickRepository $trickRepo , ImageRepository $imageRepo)
+    {
+        $userInfo=  $userRepo->findOneBy(['id'=> $user]);
+        $tricks = $trickRepo->findBy(['user'=> $userInfo]);
+        $images = $imageRepo->findAll(['trick'=> $tricks]);
+         return $this->render('main/show_user_info.html.twig',
+        ['user_info' =>  $userInfo ,'images'=> $images]);
     }
 }

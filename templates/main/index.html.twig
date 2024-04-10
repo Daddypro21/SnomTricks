@@ -28,25 +28,25 @@
 
 
  {% if tricks|length > 0 %}
-        <div class=" item-container">
-        
+        <div class=" container">
+             <div class="row ">
             {% for trick in tricks.data %}
                
-                 <div class="item ">
-                    <article class="bg-white rounded shadow"> 
+                
+                    <article class="col-md-4 col-sm-12"> 
                         <h5 class="text-center pt-2 pb-2"><a href="{{ path('app_trick_show_one', {slug:trick.newslug,id: trick.id}  )}}" class=" text-lowercase text-decoration-none text-muted ">{{ trick.title}}</a></h5>
                         <a href="{{ path('app_trick_show_one', {slug:trick.newslug,id: trick.id} )}}"><img src="{{trick.cover ? asset('uploads/images/' ~ trick.cover) : asset('images/placeholder.jpg') }}" alt="{{ trick.title }}" class="img-pin-index w-100 rounded-top"></a>
                         <p class="mt-2 ms-2" ><small class="text-muted  ">Publié il y a de cela {{ trick.createdAt|ago}}</small></p>
                         <p class="mt-2 ms-2" ><small class="text-muted  ">par {{ trick.user.firstName}} {{ trick.user.lastName}}</small></p>
 
-                        <a href="{{ path('app_trick_show_one', {slug:trick.newslug  ,id: trick.id} )}}" class="btn btn-primary btn-sm sm-2 mb-2 ms-2" type="button"><i class="fa-solid fa-eye"></i></a>
+                        <a href="{{ path('app_trick_show_one', {slug:trick.newslug  ,id: trick.id} )}}" class="btn btn-primary btn-sm sm-2 mb-2 ms-2" type="button">voir le trick</a>
                        
                      </article>  
-                </div>
+               
                   
             {% endfor %}
             
-            
+             </div>
             
            </div>
 
